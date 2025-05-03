@@ -1,66 +1,90 @@
+# mahjong_ai/core/table.py
 from mahjong_ai.core.wall import Wall
 from mahjong_ai.core.player import Player
 from mahjong_ai.core.tile import Tile
-from mahjong_ai.core import meld_handler, round_manager, draw_discard, riichi_handler, win_handler, scoring
+from mahjong_ai.core import meld_handler, riichi, round, draw_discard, Hepai
+from mahjong_ai.core.round import Round
 
 class Table:
     def __init__(self):
-        self.wall = Wall()
-        self.players = [Player(player_id=i) for i in range(4)]
-        self.current_turn = 0  # 現在輪到的玩家(0~3)
-        self.skip_draw = False  # 吃碰後這一輪不摸牌
-        self.riichi_sticks = 0  # 立直棒數量
+        self.round = Round(total_rounds=4)  # 東風戰
+        self.players = [Player(i) for i in range(4)]
+        self.wall = None
+        self.current_turn = 0
+        self.skip_draw = False  # 吃碰後跳過摸牌
         self.last_discard_player_id = None
+        self.last_discard_tile: Tile | None = None
+        self.rinshan_draw = False    # 嶺上摸牌觸發用
+        self.gang_from = None        # 記錄加槓發起者，用於搶槓判定
+        self.round.start_round(self)
 
-        self.round_wind: str = ""       # 場風（東、南等）
-        self.round_number: int = 0      # 局數（0=東一）
-        self.dealer_id: int = 0         # 親家玩家 ID
-        self.dealer_continue_count: int = 0  # 連莊次數
+    def handle_end_of_round(self, winner_id: int):
+        self.round.handle_round_end(winner_id)
+        if self.round.is_game_end():
+            print("\n==== 遊戲結束 ====")
+        else:
+            self.round.start_round(self)
 
+    def add_riichi_kyotaku(self):
+        self.round.kyotaku += 1000
 
-        round_manager.setup_initial_round(self)
+    def pay_honba_bonus(self, winner: Player):
+        bonus = self.round.honba * 300
+        winner.points += bonus
 
-    def draw_phase(self) -> Tile | None:
-        return draw_discard.draw_phase(self)
+    def get_round_info(self):
+        return self.round.get_display_string()
 
-    def discard_phase(self, tile: Tile) -> bool:
-        return draw_discard.discard_phase(self, tile)
+    def step(self):
+        player = self.players[self.current_turn]
 
-    def can_pon(self, player: Player, tile: Tile) -> bool:
-        return meld_handler.can_pon(player, tile)
+        print(f"玩家 {player.player_id} 摸牌中")
+        tile = player.draw_tile_from_wall(self.wall)
 
-    def can_chi(self, player: Player, tile: Tile) -> bool:
-        return meld_handler.can_chi(player, tile)
+        if tile is None:
+            print("牌山已空，流局。")
+            self.handle_end_of_round(-1)
+            return
 
-    def handle_melds_after_discard(self, discarded_tile: Tile, from_player_id: int) -> bool:
-        return meld_handler.handle_melds_after_discard(self, discarded_tile, from_player_id)
+        print(f"玩家 {player.player_id} 摸到：{tile}")
 
-    def try_kakan(self, player_id: int, tile: Tile) -> bool:
-        return meld_handler.try_kakan(self, player_id, tile)
+        # 自摸判定
+        if Hepai.can_tsumo(player, tile):
+            print(f"玩家 {player.player_id} 自摸！")
+            result = Hepai.settle_win(self, player, tile, is_tsumo=True)
+            print(f"番型：{result.get('yaku', [])}｜得分：{result.get('score')}\n")
+            self.handle_end_of_round(player.player_id)
+            return
 
-    def can_declare_riichi(self, player: Player) -> bool:
-        return riichi_handler.can_declare_riichi(self, player)
+        # 嘗試立直（打第一張）
+        for t in player.hand.tiles:
+            if riichi.can_declare_riichi(self, player):
+                if riichi.declare_riichi(self, player, t):
+                    player.discard_tile_from_hand(t)
+                    self.last_discard_tile = t
+                    self.last_discard_player_id = player.player_id
+                    print(f"玩家 {player.player_id} 立直打出：{t}")
+                    self.check_ron(t, player.player_id)
+                    self.current_turn = (self.current_turn + 1) % 4
+                    return
 
-    def declare_riichi(self, player_id: int) -> None:
-        return riichi_handler.declare_riichi(self, player_id)
+        # 否則打出第一張
+        discard = player.hand.tiles[0]
+        player.discard_tile_from_hand(discard)
+        self.last_discard_tile = discard
+        self.last_discard_player_id = player.player_id
+        print(f"玩家 {player.player_id} 打出：{discard}")
 
-    def is_tenpai(self, player: Player) -> bool:
-        return riichi_handler.is_tenpai(self, player)
+        self.check_ron(discard, player.player_id)
+        self.current_turn = (self.current_turn + 1) % 4
 
-    def can_ron(self, player: Player, winning_tile: Tile) -> bool:
-        return win_handler.can_ron(self, player, winning_tile)
-
-    def settle_win(self, winner_id: int, score_info: dict, is_tsumo: bool) -> None:
-        return win_handler.settle_win(self, winner_id, score_info, is_tsumo)
-
-    def handle_ryukyoku(self) -> None:
-        return win_handler.handle_ryukyoku(self)
-
-    def show_scores(self) -> None:
-        return scoring.show_scores(self)
-
-    def show_final_result(self) -> None:
-        return scoring.show_final_result(self)
-
-    def print_ryukyoku_tenpai_status(self) -> None:
-        return scoring.print_ryukyoku_tenpai_status(self)
+    def check_ron(self, tile: Tile, from_pid: int):
+        for i, p in enumerate(self.players):
+            if i == from_pid:
+                continue
+            if not p.furiten and Hepai.can_ron(self, p, tile):
+                print(f"玩家 {i} 榮和！ ← {tile}")
+                result = Hepai.settle_win(self, p, tile, is_tsumo=False)
+                print(f"番型：{result.get('yaku', [])}｜得分：{result.get('score')}\n")
+                self.handle_end_of_round(i)
+                return

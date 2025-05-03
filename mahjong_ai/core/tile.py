@@ -3,13 +3,17 @@
 class Tile:
     def __init__(self, tile_type: str, tile_value: int):
         """
-        tile_type: 'man' (萬子), 'pin' (筒子), 'sou' (索子), 'honor' (字牌)
-        tile_value: 1-9 (萬筒索) 或 1-7 (字牌：東南西北白發中)
+        建立一張麻將牌。
+        - tile_type: 'man' (萬子), 'pin' (筒子), 'sou' (索子), 'honor' (字牌)
+        - tile_value: 1-9 (萬筒索) 或 1-7 (字牌：東南西北白發中)
         """
         self.tile_type = tile_type
         self.tile_value = tile_value
 
     def __str__(self):
+        """
+        以中文格式輸出，例如 "1萬"、"9筒"、"白"
+        """
         if self.tile_type == 'man':
             return f"{self.tile_value}萬"
         elif self.tile_type == 'pin':
@@ -23,8 +27,11 @@ class Tile:
             return honor_names.get(self.tile_value, '?')
         else:
             return f"未知({self.tile_type}{self.tile_value})"
-        
+
     def to_helper_string(self):
+        """
+        轉換為簡易表示法，例如 "1m", "5p", "7z"（z=字牌）
+        """
         if self.tile_type == 'man':
             return f"{self.tile_value}m"
         elif self.tile_type == 'pin':
@@ -32,19 +39,19 @@ class Tile:
         elif self.tile_type == 'sou':
             return f"{self.tile_value}s"
         elif self.tile_type == 'honor':
-            return f"{self.tile_value}z"  # 東=1z，南=2z，... 中=7z
+            return f"{self.tile_value}z"
         else:
             return "?"
 
     def get_tile_description(self) -> str:
         """
-        返回這張牌的描述文字，例如 "5man" 或 "2pin"。
+        取得詳細描述，例如 "5man", "2honor"
         """
         return f"{self.tile_value}{self.tile_type}"
 
     def is_same_tile(self, other_tile) -> bool:
         """
-        判斷兩張牌是否完全相同。
+        判斷兩張牌是否牌面相同（不考慮是哪一張複本）
         """
         return self.tile_type == other_tile.tile_type and self.tile_value == other_tile.tile_value
 
@@ -55,3 +62,62 @@ class Tile:
 
     def __hash__(self):
         return hash((self.tile_type, self.tile_value))
+
+    # -------------------------
+    # mahjong 套件整合功能區塊
+    # -------------------------
+
+    def to_34_id(self) -> int:
+        """
+        將此 tile 轉換為 mahjong 套件使用的 0–33 格式。
+        """
+        if self.tile_type == 'man':
+            return self.tile_value - 1
+        elif self.tile_type == 'pin':
+            return 9 + self.tile_value - 1
+        elif self.tile_type == 'sou':
+            return 18 + self.tile_value - 1
+        elif self.tile_type == 'honor':
+            return 27 + self.tile_value - 1
+        raise ValueError("Unknown tile type")
+
+    @classmethod
+    def from_34_id(cls, tile_id: int):
+        """
+        從 0–33 格式反推成 Tile。
+        """
+        if tile_id < 9:
+            return cls('man', tile_id + 1)
+        elif tile_id < 18:
+            return cls('pin', tile_id - 9 + 1)
+        elif tile_id < 27:
+            return cls('sou', tile_id - 18 + 1)
+        elif tile_id < 34:
+            return cls('honor', tile_id - 27 + 1)
+        raise ValueError("Invalid tile_id")
+
+    def get_all_136_ids(self) -> list[int]:
+        """
+        回傳此牌對應的 136 編號（每種 tile 有 4 張，編號連續）
+        例如 5m → [16, 17, 18, 19]
+        """
+        base = self.to_34_id() * 4
+        return [base + i for i in range(4)]
+
+    @classmethod
+    def from_helper_string(cls, s: str):
+        """
+        從 helper 格式（如 '7z', '3p'）建立 Tile。
+        """
+        if len(s) != 2:
+            raise ValueError("Invalid helper string")
+        value, suit = int(s[0]), s[1]
+        if suit == 'm':
+            return cls('man', value)
+        elif suit == 'p':
+            return cls('pin', value)
+        elif suit == 's':
+            return cls('sou', value)
+        elif suit == 'z':
+            return cls('honor', value)
+        raise ValueError("Invalid suit")

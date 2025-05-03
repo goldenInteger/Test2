@@ -1,61 +1,27 @@
-import random
+from mahjong_ai.core.player import Player
+from mahjong_ai.core.player import Player
+from mahjong_ai.core.tile import Tile
+from mahjong_ai.core import Hepai
 
-from mahjong_ai.core.table import Table
-from mahjong_ai.core.draw_discard import draw_phase, discard_phase
-from mahjong_ai.core.yaku_checker import detect_yakus
-from mahjong_ai.core.scoring import calculate_hand_score, print_score_result
-from  mahjong_ai.core.round_manager import deal_initial_hands
+# 建立測試玩家
+player = Player(player_id=0)
 
-def simulate_until_win():
-    """
-    模擬直到有玩家胡牌（自摸），流局會重新開局直到胡為止。
-    """
-    table = Table()
+# 手牌13張（不含最後一張）
+tiles = [
+    Tile("man", 1), Tile("man", 2), Tile("man", 3),
+    Tile("pin", 1), Tile("pin", 2), Tile("pin", 3),
+    Tile("sou", 1), Tile("sou", 2), Tile("sou", 3),
+    Tile("sou", 4), Tile("sou", 5), Tile("sou", 6),
+    Tile("sou", 6)
+]
+player.hand.tiles = tiles  # 不要額外加 tile
 
-    while True:
-        if table.wall.is_empty():
-            print("\n【流局】牌山打完，重新開始下一局...\n")
-            table.round_number += 1
-            table.wall = table.wall.__class__()  # 新建牌山
-            for player in table.players:
-                player.reset()
-            deal_initial_hands(table)
-            continue
+# 模擬摸牌
+drawn_tile = Tile("sou", 6)
 
-        player = table.players[table.current_turn]
-        tile = draw_phase(table)
-
-        if tile:
-            print(f"玩家{table.current_turn} 摸到 {tile}")
-
-            if table.can_ron(player, tile):
-                print(f"🏆 玩家{table.current_turn} 自摸胡牌！")
-
-                yakus = detect_yakus(
-                    player.hand.tiles, player.melds,
-                    is_menzen=(len(player.melds) == 0),
-                    is_tsumo=True,
-                    is_riichi=player.declared_riichi,
-                    is_ippatsu=player.ippatsu_possible,
-                    is_first_turn=False
-                )
-                print("達成役種：", yakus)
-                score_info = calculate_hand_score(
-                    yakus, is_tsumo=True,
-                    is_dealer=(table.current_turn == table.dealer_id)
-                )
-                print_score_result(score_info, is_tsumo=True, is_dealer=(table.current_turn == table.dealer_id))
-                table.settle_win(table.current_turn, score_info, is_tsumo=True)
-                break
-
-        if player.hand.tiles:
-            discard = random.choice(player.hand.tiles)
-            discard_phase(table, discard)
-            print(f"玩家 {table.last_discard_player_id} 打出 {discard}")
-            table.handle_melds_after_discard(discard, table.last_discard_player_id)
-
-    table.show_scores()
-
-
-if __name__ == "__main__":
-    simulate_until_win()
+# 檢查
+print("手牌張數：", len(player.hand.tiles))  # 應該是 13
+if Hepai.can_tsumo(player, drawn_tile):
+    print("✅ 測試成功：這副牌可以自摸和牌！")
+else:
+    print("❌ 測試失敗：這副牌無法自摸（應該可以）")
