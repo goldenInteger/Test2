@@ -114,4 +114,64 @@ def try_kakan(table: Table, player_id: int, tile: Tile) -> bool:
 
     print(f"玩家 {player_id} 成功加槓！進行嶺上摸牌。")
     table.rinshan_draw = True
+    return True
+
+def try_ankan(table: Table, player_id: int) -> bool:
+    player = table.players[player_id]
+    tile_counts = {}
+
+    # 統計手牌
+    for tile in player.hand.tiles:
+        key = (tile.tile_type, tile.tile_value)
+        tile_counts[key] = tile_counts.get(key, 0) + 1
+
+    # 搜尋可以暗槓的牌
+    for (t_type, t_val), count in tile_counts.items():
+        if count == 4:
+            target_tile = Tile(t_type, t_val)
+            print(f"玩家 {player_id} 成功暗槓 {target_tile}")
+
+            # 移除四張牌
+            removed = 0
+            for tile in list(player.hand.tiles):
+                if tile.is_same_tile(target_tile):
+                    player.hand.remove_tile(tile)
+                    removed += 1
+                if removed == 4:
+                    break
+
+            # 加入暗槓 meld
+            meld = Meld([target_tile] * 4, MeldType.ANKAN, from_player_id=player_id)
+            player.melds.append(meld)
+
+            # 設定嶺上抽牌旗標
+            table.rinshan_draw = True
+            return True
+
+    return False
+
+def try_daiminkan(table: Table, player_id: int, tile: Tile, from_player_id: int) -> bool:
+    player = table.players[player_id]
+    if sum(1 for t in player.hand.tiles if t.is_same_tile(tile)) >= 3:
+        print(f"玩家 {player_id} 對來自玩家 {from_player_id} 的 {tile} 進行大明槓")
+
+        # 移除三張手牌
+        removed = 0
+        for tile_ in list(player.hand.tiles):
+            if tile_.is_same_tile(tile):
+                player.hand.remove_tile(tile_)
+                removed += 1
+            if removed == 3:
+                break
+
+        # 新增大明槓副露
+        meld = Meld([tile] * 4, MeldType.DAIMINKAN, from_player_id=from_player_id)
+        player.melds.append(meld)
+
+        # 設定嶺上抽牌
+        table.rinshan_draw = True
+        table.current_turn = player_id
+        table.skip_draw = False  # 確保這回合還能摸牌
+        return True
+
     return False

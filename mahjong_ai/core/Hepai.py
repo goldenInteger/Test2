@@ -48,7 +48,7 @@ def settle_win(table: "Table", winner: Player, win_tile: Tile, is_tsumo: bool) -
         return {"error": "無法和牌"}
 
     # 加總得點（主體分）
-    point_gain = result["score"].main
+    point_gain = result["score"]["main"]
     winner.points += point_gain
 
     # 場棒與供託
@@ -58,13 +58,13 @@ def settle_win(table: "Table", winner: Player, win_tile: Tile, is_tsumo: bool) -
 
     # 扣其他玩家點數（簡化版：非中獎者平均付）
     if is_tsumo:
-        payments = result["score"].additional
+        payments = result["score"]["additional"]
         for i, p in enumerate(table.players):
             if p != winner:
                 p.points -= payments
     else:
         loser = table.players[table.last_discard_player_id]
-        payments = result["score"].main
+        payments = result["score"]["main"]
         loser.points -= payments
 
     return result

@@ -3,11 +3,16 @@ from enum import Enum
 from mahjong_ai.core.tile import Tile
 
 class MeldType(Enum):
-    CHII = "Chi"      # 吃
-    PON = "Pon"        # 碰
-    KAN = "Kan"        # 槓（明槓或加槓）
-    CHANKAN = "Chankan"  # 搶槓
-    NUKI = "Nuki"      # 抜き（北抜き，三麻用）
+    CHII = "Chi"            # 吃
+    PON = "Pon"             # 碰
+    KAN = "Kan"             # 不再使用（改為下列明確分類）
+    CHANKAN = "Chankan"     # 搶槓
+    NUKI = "Nuki"           # 北抜き（三麻）
+
+    KAKAN = "Kakan"         # 加槓（從碰變成槓）
+    ANKAN = "Ankan"         # 暗槓（自己4張）
+    DAIMINKAN = "Daiminkan" # 大明槓（對手打出第4張）
+
 
 class Meld:
     def __init__(self, tiles: list[Tile], meld_type: MeldType, from_player_id: int):

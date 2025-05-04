@@ -49,7 +49,7 @@ class Tile:
         """
         return f"{self.tile_value}{self.tile_type}"
 
-    def is_same_tile(self, other_tile) -> bool:
+    def is_same_tile(self, other_tile: "Tile") -> bool:
         """
         判斷兩張牌是否牌面相同（不考慮是哪一張複本）
         """
