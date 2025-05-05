@@ -1,8 +1,13 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
 # mahjong_ai/core/draw_discard.py
 from mahjong_ai.core.Hepai import can_tsumo, can_ron, settle_win
+from mahjong_ai.core.tile import Tile
+if TYPE_CHECKING:
+    from mahjong_ai.core.table import Table
 
 
-def draw_phase(table) -> None:
+def draw_phase(table: Table) -> None:
     """
     處理摸牌階段：
     - 支援副露後跳過摸牌
@@ -39,7 +44,7 @@ def draw_phase(table) -> None:
         return
 
 
-def discard_phase(table, tile) -> None:
+def discard_phase(table: Table, tile: Tile) -> None:
     """
     處理打牌階段：
     - 加入河牌

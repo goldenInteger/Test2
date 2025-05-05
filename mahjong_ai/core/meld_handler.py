@@ -90,7 +90,7 @@ def make_chi(table: Table, player: Player, tile: Tile, from_player_id: int) -> N
                 break
     for t in used:
         player.hand.remove_tile(t)
-    meld = Meld([Tile(tile.tile_type, v) for v in chosen], MeldType.CHI, from_player_id)
+    meld = Meld([Tile(tile.tile_type, v) for v in chosen], MeldType.CHII, from_player_id)
     player.melds.append(meld)
 
 def try_kakan(table: Table, player_id: int, tile: Tile) -> bool:

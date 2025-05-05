@@ -20,7 +20,8 @@ from mahjong_ai.core.player import Player
 def can_ron(table: "Table", player: Player, win_tile: Tile) -> bool:
     if player.furiten:
         return False
-    return can_declare_win(player.hand.tiles, player.melds, win_tile)
+    temp_hand = player.hand.tiles + [win_tile]
+    return can_declare_win(temp_hand, player.melds, win_tile)
 
 def can_tsumo(player: Player, drawn_tile: Tile) -> bool:
     temp_hand = player.hand.tiles + [drawn_tile]
@@ -100,6 +101,7 @@ def evaluate_win(hand: list[Tile], melds: list[Meld], win_tile: Tile, is_tsumo: 
     )
     result = HandCalculator().estimate_hand_value(tiles_136, win_tile_136, config=config, melds=convert_melds_to_mahjong(melds))
     if result.error:
+        print(f"🔴 和牌計算錯誤：{result.error}")
         return {"can_win": False, "han": 0, "fu": 0, "yaku": [], "score": {}}
     return {
         "can_win": True,
