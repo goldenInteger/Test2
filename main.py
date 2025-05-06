@@ -1,36 +1,24 @@
+from mahjong_ai.utils.helper_interface import call_mahjong_helper
+from mahjong_ai.utils.helper_interface import choose_best_discard_from_output
 from mahjong_ai.core.tile import Tile
-from mahjong_ai.core.player import Player
-from mahjong_ai.core.meld import Meld
-from mahjong_ai.core.Hepai import evaluate_win
 
-def test_win_hand(label: str, hand_tiles: list[Tile], win_tile: Tile, is_tsumo=True, is_dealer=False):
-    print(f"\n🀄 測試牌型：{label}")
-    player = Player(player_id=0)
-    player.hand.tiles = hand_tiles
-    result = evaluate_win(
-        hand=player.hand.tiles + [win_tile],
-        melds=[],
-        win_tile=win_tile,
-        is_tsumo=is_tsumo,
-        is_dealer=is_dealer
-    )
-    if not result["can_win"]:
-        print("❌ 無法和牌")
-        print("役種：", ", ".join(result["yaku"]))
-        print("得分：", result["score"])
-    else:
-        print(f"✅ 可和牌！番數：{result['han']}，符數：{result['fu']}")
-        print("役種：", ", ".join(result["yaku"]))
-        print("得分：", result["score"])
+# 建立模擬手牌：123m 456p 789s 東南西
+hand_tiles = [
+    Tile('man', 1), Tile('man', 2), Tile('man', 3),
+    Tile('pin', 4), Tile('pin', 5), Tile('pin', 6),
+    Tile('sou', 7), Tile('sou', 8), Tile('sou', 9),
+    Tile('honor', 1), Tile('honor', 2), Tile('honor', 3),
+    Tile('man', 5), Tile('honor', 1)
+]
 
-def test_all_win_cases():
-    test_win_hand("清一色", [Tile("man", 1), Tile("man", 1),
-                            Tile("man", 2), Tile("man", 2),
-                            Tile("man", 3), Tile("man", 3),
-                            Tile("man", 4), Tile("man", 4),
-                            Tile("man", 5), Tile("man", 5),
-                            Tile("man", 6), Tile("man", 6),
-                            Tile("man", 7)], Tile("man", 7))
+# 模擬河牌（目前沒用到分析但可以先放）
+river = [
+    Tile('man', 7), Tile('pin', 9)
+]
 
-if __name__ == "__main__":
-    test_all_win_cases()
+# 呼叫 helper
+text_output = call_mahjong_helper(hand_tiles)
+best_discard = choose_best_discard_from_output(text_output)
+t = Tile.from_chinese_string(best_discard)
+print(t.tile_type, t.tile_value)
+
