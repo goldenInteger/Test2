@@ -57,8 +57,8 @@ class Table:
             return
 
         # 嘗試立直（打第一張）
-        for t in player.hand.tiles:
-            if riichi.can_declare_riichi(self, player):
+        if riichi.can_declare_riichi(self, player):
+            for t in player.hand.tiles:
                 if riichi.declare_riichi(self, player, t):
                     player.discard_tile_from_hand(t)
                     self.last_discard_tile = t
