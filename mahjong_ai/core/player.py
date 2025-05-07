@@ -169,3 +169,9 @@ class Player:
             "yaku": [(y.name, y.han) for y in result.yaku],
             "fu_details": result.fu_details
         }
+    def show_hand(self):
+        """
+        印出玩家手牌的中文表示。
+        """
+        tiles_str = ' '.join(str(tile) for tile in self.hand.tiles)
+        print(f"玩家 {self.player_id} 的手牌：{tiles_str}")
