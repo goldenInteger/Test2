@@ -68,14 +68,33 @@ class Table:
                     self.current_turn = (self.current_turn + 1) % 4
                     return
 
-        # 否則打出第一張
-        discard = player.hand.tiles[0]
-        player.discard_tile_from_hand(discard)
-        self.last_discard_tile = discard
-        self.last_discard_player_id = player.player_id
-        print(f"玩家 {player.player_id} 打出：{discard}")
+        # AI 出牌策略（player_id ≠ 0 用 mahjong-helper）
+        if player.player_id != 5:
+            from mahjong_ai.utils.helper_interface import call_mahjong_helper, choose_best_discard_from_output, choose_discard_by_speed, choose_comprehensive_discard_from_output
+            from mahjong_ai.core.tile import Tile
 
-        self.check_ron(discard, player.player_id)
+            output = call_mahjong_helper(player.hand.tiles)
+            best_str = choose_best_discard_from_output(output)
+            
+            # output = call_mahjong_helper(player.hand.tiles) 
+            # best_str = choose_discard_by_speed(output)
+
+            # output = call_mahjong_helper(player.hand.tiles) 
+            # best_str = choose_comprehensive_discard_from_output(output)
+            try:
+                t = Tile.from_helper_string(best_str)
+            except:
+                t = player.hand.tiles[0]  # fallback
+        else:
+            t = player.hand.tiles[0]  # 你自己控制的玩家
+
+
+        player.discard_tile_from_hand(t)
+        self.last_discard_tile = t
+        self.last_discard_player_id = player.player_id
+        print(f"玩家 {player.player_id} 打出：{t}")
+        player.__str__()
+        self.check_ron(t, player.player_id)
         self.current_turn = (self.current_turn + 1) % 4
 
     def check_ron(self, tile: Tile, from_pid: int):
