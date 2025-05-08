@@ -74,11 +74,11 @@ class Wall:
             return None
         return self.tiles.pop(0)
 
-    def draw_dora_indicators(self) -> Tile:
+    def draw_dora_indicators(self) -> list[Tile]:
         """
         取得表寶牌表示牌
         """
-        return self.dora_wall.pop(0)
+        return [self.dora_wall.pop(0)]
 
     def draw_rinshan_tile(self, player: Player) -> Tile | None:
         """

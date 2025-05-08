@@ -51,12 +51,10 @@ class Player:
         self.hand = Hand()
         self.river = River()
         self.melds = []
-        self.points = 25000
         self.furiten = False
         self.furiten_temp = -1
         self.riichi_turn = -1
 
-        self.seat_wind = 0
         self.round_wind = 0
         self.last_chi_meld = None
         self.win_tile = None
@@ -87,7 +85,7 @@ class Player:
         """
         槓後從牌堆尾端抽嶺上牌。
         """
-        tile = wall.draw_rinshan_tile()
+        tile = wall.draw_rinshan_tile(self)
         if tile:
             self.hand.add_tile(tile)
         return tile

@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 # Mahjong 和牌邏輯整合模組（完整包裝）
 
+# TODO : 解決例外錯誤： negative shift count
 from mahjong.tile import TilesConverter
 from mahjong.hand_calculating.hand import HandCalculator
 from mahjong.hand_calculating.hand_config import HandConfig
@@ -99,6 +100,9 @@ def evaluate_win(table: Table) -> dict:
     winner = table.winner
     tiles_136 = convert_tiles_to_136(winner.hand.tiles)
     win_tile_136 = convert_tile_to_136(winner.win_tile)
+    dora_tiles = table.wall.open_dora_wall + table.wall.uradora_wall
+    dora_tiles_136 = convert_tiles_to_136(dora_tiles)
+
     config = HandConfig(
         is_tsumo = winner.is_tsumo,
         is_riichi = winner.is_riichi,
@@ -117,8 +121,9 @@ def evaluate_win(table: Table) -> dict:
     )
     result = HandCalculator().estimate_hand_value(
         tiles_136, win_tile_136,
+        dora_indicators=dora_tiles_136,
         config=config,
-        melds=convert_melds_to_mahjong(winner.melds)
+        melds = convert_melds_to_mahjong(winner.melds)
     )
 
     if result.error:
@@ -135,11 +140,23 @@ def evaluate_win(table: Table) -> dict:
 # === Tile / Meld 資料轉換 ===
 
 def convert_tiles_to_136(tiles: list[Tile]) -> list[int]:
-    man = ''.join(str(t.tile_value) for t in tiles if t.tile_type == 'man')
-    pin = ''.join(str(t.tile_value) for t in tiles if t.tile_type == 'pin')
-    sou = ''.join(str(t.tile_value) for t in tiles if t.tile_type == 'sou')
+    """
+    將 Tile 物件轉為支援赤寶牌的 string_to_136_array 格式（r 或 0 表示紅5）
+    """
+    def encode_tile(t: Tile) -> str:
+        if t.tile_value == 5 and t.is_aka_dora:
+            return 'r'
+        return str(t.tile_value)
+
+    man = ''.join(encode_tile(t) for t in tiles if t.tile_type == 'man')
+    pin = ''.join(encode_tile(t) for t in tiles if t.tile_type == 'pin')
+    sou = ''.join(encode_tile(t) for t in tiles if t.tile_type == 'sou')
     honors = ''.join(str(t.tile_value) for t in tiles if t.tile_type == 'honor')
-    return TilesConverter.string_to_136_array(man=man, pin=pin, sou=sou, honors=honors)
+
+    return TilesConverter.string_to_136_array(
+        man=man, pin=pin, sou=sou, honors=honors, has_aka_dora=True
+    )
+
 
 def convert_tiles_to_34(tiles: list[Tile]) -> list[int]:
     man = ''.join(str(t.tile_value) for t in tiles if t.tile_type == 'man')

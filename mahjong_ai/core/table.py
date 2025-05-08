@@ -4,6 +4,7 @@ from mahjong_ai.core.tile import Tile
 from mahjong_ai.core import Chupai, Mingpai, riichi, Hepai, Liuju
 from mahjong_ai.core.round import Round
 # TODO: 出牌邏輯
+
 class Table:
     def __init__(self):
         self.round = Round(total_rounds=4)  # 東風戰
@@ -29,16 +30,12 @@ class Table:
                 self.step()
             self.round.handle_round_end(self)
         print("\n==== 遊戲結束 ====")
+        for p in range(4):
+            print(f"\n{p} : {self.players[p].points}")
 
     def step(self):
         player = self.players[self.current_turn]
         # 特殊流局
-        # 四風連打
-        if self.turn == 4 and not self.is_mingpai:
-            if Liuju.is_sufon_renda(self.players):
-                self.is_liuju = True
-                self.round_over = True
-                return
          # 九種九牌
         if self.turn < 4 and not self.is_mingpai:
             if Liuju.is_kyuushu_kyuuhai(player):
@@ -54,10 +51,11 @@ class Table:
         # 正確流程摸打(紀錄一巡用)
         if not self.skip_discard and not self.skip_draw and not self.rinshan_draw:
             self.turn = self.turn + 1
+        print("玩家手牌：", [str(tile) for tile in player.hand.tiles])
         # 摸牌
         draw_tile = Chupai.draw_phase(self, player)
-        # 牌堆已空
-        if self.is_liuju:
+        # 提前結束
+        if self.round_over:
             return
         # TODO : 之後這裡要加出牌邏輯
         discard_tile: Tile
@@ -75,10 +73,16 @@ class Table:
             else:
                 discard_tile = player.hand.tiles[0]   # 不可立直，出牌邏輯補上
         else:
-            discard_tile = player.hand.tiles[0]   # 已立直，自動打摸牌
-                
+            discard_tile = draw_tile   # 已立直，自動打摸牌
+
         # 丟牌
         Chupai.discard_phase(self, discard_tile)
+        # 四風連打
+        if self.turn == 4 and not self.is_mingpai:
+            if Liuju.is_sufon_renda(self.players):
+                self.is_liuju = True
+                self.round_over = True
+                return
         # 若無任何副露，輪到下一位
-        if not self.skip_draw or not self.rinshan_draw:
+        if not self.skip_draw and not self.rinshan_draw:
             self.current_turn = (self.current_turn + 1) % 4

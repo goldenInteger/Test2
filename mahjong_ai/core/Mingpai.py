@@ -19,6 +19,7 @@ def ask_player_action(player: Player, action_type: str, tile: Tile, options: lis
     詢問玩家是否要執行某個行動。
     若 options 存在（如 Chi 有多組可吃），則應返回玩家選擇的組合。
     """
+    """"
     if not hasattr(player, 'is_human') or not hasattr(player, 'strategy'):
         return False
     if player.is_human:
@@ -26,6 +27,12 @@ def ask_player_action(player: Player, action_type: str, tile: Tile, options: lis
         return options[0] if options else False
     else:
         return player.strategy.should_call(action_type, tile, options)
+    """
+    print(action_type)
+    if options == None:
+        return True
+    else:
+        return options[0]
 
 # === 副露決策流程（吃碰槓和） ===
 def check_others_can_meld(table: Table, discarded_tile: Tile, from_player_id: int) -> List[Tuple[int, str]]:
@@ -94,7 +101,7 @@ def try_chankan(table: Table, tile: Tile, from_player_id: int) -> bool:
     for offset in range(1, 4):
         pid = (from_player_id + offset) % 4
         player = table.players[pid]
-        if can_ron(table, player, tile):
+        if can_ron_13(table, player, tile):
             if ask_player_action(player, "chankan", tile):
                 table.winner = player
                 table.last_discard_player_id = from_player_id

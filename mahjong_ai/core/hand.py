@@ -23,7 +23,7 @@ class Hand:
         回傳 True 表示成功移除，False 表示未找到。
         """
         for existing_tile in self.tiles:
-            if existing_tile.is_same_tile(tile):
+            if existing_tile.is_same_tile(tile) and existing_tile.is_aka_dora == tile.is_aka_dora:
                 self.tiles.remove(existing_tile)
                 return True
         return False

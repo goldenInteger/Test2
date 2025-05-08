@@ -34,7 +34,8 @@ def draw_phase(table: Table, player: Player) -> Tile:
             print("\n四槓散了 !")
             return
         #翻寶牌
-        table.wall.open_dora_wall.append(table.wall.draw_dora_indicators(table.wall.dora_wall))
+        Bao_tile = table.wall.draw_dora_indicators()
+        table.wall.open_dora_wall.append(Bao_tile)
         print(f"玩家 {player.player_id} 加槓後嶺上摸牌：{tile}")
     else:
         # 摸牌
