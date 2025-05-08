@@ -22,8 +22,8 @@ def draw_phase(table: Table, player: Player) -> Tile:
         table.skip_draw = False
         return
     # 同巡振聽取消
-    if table.turn - player.furiten_temp >= 4:
-        player.furiten_temp = False
+    if player.furiten_temp != -1 and table.turn - player.furiten_temp >= 4:
+        player.furiten_temp = -1
 
     # 嶺上開花判定（加槓後補牌）
     if table.rinshan_draw:

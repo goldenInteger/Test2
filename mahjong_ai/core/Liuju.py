@@ -14,8 +14,8 @@ def check_tenpai_bonus(players: list[Player]) -> None:
     """
     流局時的聽牌與未聽牌點數加減
     """
-    tenpai_players = [p for p in players if is_tenpai(p)]
-    noten_players = [p for p in players if not is_tenpai(p)]
+    tenpai_players = [p for p in players if is_tenpai(p.hand.tiles)]
+    noten_players = [p for p in players if not is_tenpai(p.hand.tiles)]
 
     print(f" 聽牌者: {[p.player_id for p in tenpai_players]}")
     print(f" 未聽牌者: {[p.player_id for p in noten_players]}")
@@ -42,51 +42,36 @@ def is_kyuushu_kyuuhai(player: Player) -> bool:
     """
     判斷是否九種九牌（起手十三張中有 >=9 種么九）
     """
-    # 尚未打牌
-    if len(player.river.get_discarded_tiles()) > 0:
-        return False
-    # 尚未鳴牌
-    if len(player.melds) > 0:
-        return False
-
-    yaochu_set = set()
+    count = 0
     for t in player.hand.tiles:
         if t.is_terminal_or_honor():
-            yaochu_set.add((t.tile_type, t.tile_value))
-    return len(yaochu_set) >= 9
+            count += 1
+    return count >= 9
 
 
 def is_sufon_renda(players: list[Player]) -> bool:
     """
     判斷是否為四風連打：每人第一張打出的牌皆為風牌
     """
-    try:
-        first_discards = [
-            p.river.get_discarded_tiles()[0].tile
-            for p in players
-            if len(p.river.get_discarded_tiles()) >= 1
-        ]
-        if len(first_discards) != 4:
-            return False
-        # 檢查都是風牌
-        if not all(t.is_wind() for t in first_discards):
-            return False
-        # 檢查是同一張風牌
-        first_tile = first_discards[0]
-        if not all(t.tile_type == first_tile.tile_type and t.tile_value == first_tile.tile_value for t in first_discards):
-            return False
-        # 檢查無人鳴牌
-        if any(len(p.melds) > 0 for p in players):
-            return False
-        return True
-    except:
+    first_discards = [p.river.get_discarded_tiles()[0].tile for p in players]
+    if len(first_discards) != 4:
         return False
+    # 檢查都是風牌
+    for t in first_discards:
+        if not t.is_wind():
+            return False
+    # 檢查是同一張風牌
+    first_tile = first_discards[0]
+    for t in first_discards:
+        if t.tile_type != first_tile.tile_type or t.tile_value != first_tile.tile_value:
+            return False
+    return True
 
 def is_suucha_riichi(players: list[Player]) -> bool:
     """
     四家立直（所有人皆立直）
     """
-    return all(p.riichi_declared for p in players)
+    return all(p.is_riichi for p in players)
 
 def is_suukantsu_draw(wall: Wall) -> bool:
     return len(wall.rinshan_wall) == 0  

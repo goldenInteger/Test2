@@ -120,83 +120,8 @@ class Player:
             tiles[i] -= 1
         self.furiten = False
 
-    def declare_riichi(self) -> bool:
-        """
-        嘗試宣告立直（條件簡化版）：
-        - 未立直
-        - 分數足夠
-        - 為聽牌狀態
-        成功則扣1000點並啟用一發狀態。
-        """
-        if self.riichi_declared or self.points < 1000:
-            return False
-        from mahjong.shanten import Shanten
-        tiles_34 = self.hand.to_counts_34()
-        shanten = Shanten().calculate_shanten(tiles_34)
-        if shanten == 0:
-            self.riichi_declared = True
-            self.points -= 1000
-            self.ippatsu_possible = True
-            return True
-        return False
-
     def add_meld(self, meld: Meld) -> None:
         """
         加入一組副露（吃/碰/槓）到自己的紀錄中。
         """
         self.melds.append(meld)
-
-    def receive_tile(self, tile: Tile) -> None:
-        """
-        把一張牌直接加入手牌，通常用於副露後獲得的牌。
-        """
-        self.hand.add_tile(tile)
-
-    def can_win(self) -> bool:
-        """
-        使用 mahjong 套件判斷目前手牌是否可胡。
-        副露支援中（以 melds 計算），不考慮和了形式（如自摸/榮和）。
-        """
-        agari = Agari()
-        tiles_34 = self.hand.to_counts_34()
-        # 傳入副露 tiles（每副 meld 都拆開）
-        melds_34 = []
-        for meld in self.melds:
-            meld_ids = [tile.to_34_id() for tile in meld.tiles]
-            melds_34.append(meld_ids)
-        return agari.is_agari(tiles_34, melds_34)
-
-    def get_win_result(self, win_tile: Tile) -> dict:
-        """
-        使用 mahjong 套件完整計算胡牌結果。
-        - win_tile: 和牌那張
-        - is_tsumo: 是否為自摸（否則為榮和）
-
-        回傳 dict，包含番種名稱、番數、得點等資訊。
-        """
-        calculator = HandCalculator()
-        tiles_136 = [tile.get_all_136_ids()[0] for tile in self.hand.get_tile_objects()]
-        win_tile_id = win_tile.get_all_136_ids()[0]
-        melds = []
-        config = HandConfig(
-            is_tsumo=self.is_tsumo,
-            is_riichi=self.is_riichi,
-            player_wind=self.seat_wind,
-            round_wind=self.round_wind,
-            has_dora=False,
-        )
-        result = calculator.estimate_hand_value(
-            TilesConverter.to_34_array(tiles_136),
-            win_tile_id=win_tile_id,
-            melds=melds,
-            config=config
-        )
-        if result.error:
-            return {"error": result.error.as_string()}
-        return {
-            "han": result.han,
-            "fu": result.fu,
-            "cost": result.cost.__dict__,
-            "yaku": [(y.name, y.han) for y in result.yaku],
-            "fu_details": result.fu_details
-        }

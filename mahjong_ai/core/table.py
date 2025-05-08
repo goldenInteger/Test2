@@ -33,20 +33,21 @@ class Table:
     def step(self):
         player = self.players[self.current_turn]
         # 特殊流局
-        if self.turn == 4:
-            # 四風連打
-            if Liuju.is_sufon_renda:
+        # 四風連打
+        if self.turn == 4 and not self.is_mingpai:
+            if Liuju.is_sufon_renda(self.players):
                 self.is_liuju = True
                 self.round_over = True
                 return
-            # 九種九牌
-            if Liuju.is_kyuushu_kyuuhai:
+         # 九種九牌
+        if self.turn < 4 and not self.is_mingpai:
+            if Liuju.is_kyuushu_kyuuhai(player):
                 if Mingpai.ask_player_action(player, "liuju", None):
                     self.is_liuju = True
                     self.round_over = True
                     return
         # 四家立直
-        if Liuju.is_suucha_riichi:
+        if Liuju.is_suucha_riichi(self.players):
             self.is_liuju = True
             self.round_over = True
             return
@@ -55,9 +56,10 @@ class Table:
             self.turn = self.turn + 1
         # 摸牌
         draw_tile = Chupai.draw_phase(self, player)
-
+        # 牌堆已空
+        if self.is_liuju:
+            return
         # TODO : 之後這裡要加出牌邏輯
-
         discard_tile: Tile
 
         # 立直
@@ -69,11 +71,11 @@ class Table:
                     riichi.declare_riichi(self, player, chosen_option)
                     discard_tile = chosen_option
                 else:
-                    discard_tile = draw_tile  # 玩家選擇不立直，正常打牌，出牌邏輯補上
+                    discard_tile = player.hand.tiles[0]  # 玩家選擇不立直，正常打牌，出牌邏輯補上
             else:
-                discard_tile = draw_tile  # 不可立直，出牌邏輯補上
+                discard_tile = player.hand.tiles[0]   # 不可立直，出牌邏輯補上
         else:
-            discard_tile = draw_tile  # 已立直，自動打摸牌
+            discard_tile = player.hand.tiles[0]   # 已立直，自動打摸牌
                 
         # 丟牌
         Chupai.discard_phase(self, discard_tile)

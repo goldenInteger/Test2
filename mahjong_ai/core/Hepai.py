@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 # Mahjong 和牌邏輯整合模組（完整包裝）
-# TODO :　HandConfig完善
+
 from mahjong.tile import TilesConverter
 from mahjong.hand_calculating.hand import HandCalculator
 from mahjong.hand_calculating.hand_config import HandConfig
@@ -22,13 +22,19 @@ from mahjong_ai.core.player import Player
 def can_ron(table: "Table", player: Player, win_tile: Tile) -> bool:
     if player.furiten:
         return False
-    return can_declare_win(player.hand, player.melds, win_tile)
+    return can_declare_win(player.hand.tiles, player.melds, win_tile)
+# 手牌有13張
+def can_ron_13(table: "Table", player: Player, win_tile: Tile) -> bool:
+    if player.furiten:
+        return False
+    temp_tiles = player.hand.tiles + [win_tile]
+    return can_declare_win(temp_tiles, player.melds, win_tile)
 # 手牌已有14張
 def can_tsumo(player: Player, drawn_tile: Tile) -> bool:
-    return can_declare_win(player.hand, player.melds, drawn_tile)
+    return can_declare_win(player.hand.tiles, player.melds, drawn_tile)
 # 手牌有13張
-def is_tenpai(hand: Hand) -> bool:
-    tiles_34 = convert_tiles_to_34(hand.tiles)
+def is_tenpai(tiles: list[Tile]) -> bool:
+    tiles_34 = convert_tiles_to_34(tiles)
     return Shanten().calculate_shanten(tiles_34) == 0
 
 
@@ -50,16 +56,22 @@ def settle_win(table: "Table") -> dict:
     table.winner.points += table.round.kyotaku
     table.round.kyotaku = 0
 
-    # 扣其他玩家點數（簡化版：非中獎者平均付）
+    # 分數計算
     if table.winner.is_tsumo:
-        payments = result["score"]["additional"]
-        for i, p in enumerate(table.players):
-            if p != table.winner:
-                p.points -= payments
+        # 自摸情況
+        cost = result["score"]
+        for p in table.players:
+            if p == table.winner:
+                continue
+            if p.is_dealer:
+                p.points -= cost["dealer"]  # 莊家付較多
+            else:
+                p.points -= cost["non_dealer"]  # 子家付較少
     else:
+        # 榮和（放銃）
         loser: Player = table.players[table.last_discard_player_id]
-        payments = result["score"]["main"]
-        loser.points -= payments
+        cost = result["score"]
+        loser.points -= cost["main"]  # 放銃者付全部
         bonus = table.round.honba * 300
         loser.points -= bonus
 

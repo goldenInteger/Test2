@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from mahjong_ai.core.wall import Wall
 from mahjong_ai.core.player import Player
-from mahjong_ai.core import Hepai
+from mahjong_ai.core import Hepai, Liuju
 
 if TYPE_CHECKING:
     from mahjong_ai.core.table import Table  # 僅供型別檢查工具使用，不會在執行時引入
@@ -75,14 +75,18 @@ class Round:
         - kyotaku 照常累積（由胡牌者領取）
         """
         winner_id: int
-
+        # 流局
         if table.is_liuju:
             table.winner = Hepai.can_nagashi_mangan(table)
+            # 無法流局滿貫
             if Hepai.can_nagashi_mangan(table) == None:
+                Liuju.check_tenpai_bonus(table.players)
+                winner_id = -1
+            # 可以流局滿貫
+            else:
                 winner_id = table.winner.player_id
                 Hepai.settle_win(table)
-            else:
-                winner_id = -1
+        # 沒流局
         else:
             winner_id = table.winner.player_id
             Hepai.can_chiihou(table)
@@ -90,7 +94,7 @@ class Round:
             Hepai.can_renhou(table)
             Hepai.can_tenhou(table)
             Hepai.settle_win(table)
-        
+        # 連莊
         if winner_id == self.dealer_id:
             self.dealer_continue_count += 1
             self.honba += 1

@@ -62,9 +62,3 @@ def declare_riichi(table: Table, player: Player, discard_tile: Tile) :
 
     table.round.add_riichi_kyotaku()
     print(f"玩家 {player.player_id} 宣告【立直】，並打出：{discard_tile}")
-
-def evaluate_riichi_win(table: Table, player: Player, win_tile: Tile, is_tsumo: bool) -> dict:
-    """
-    胡牌後結算番與得分，委派給 settle_win。
-    """
-    return settle_win(table, player, win_tile, is_tsumo=is_tsumo)

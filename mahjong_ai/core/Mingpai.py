@@ -8,7 +8,7 @@ from typing import List, Tuple
 from mahjong_ai.core.tile import Tile
 from mahjong_ai.core.meld import Meld, MeldType
 from mahjong_ai.core.player import Player
-from mahjong_ai.core.Hepai import can_ron, settle_win
+from mahjong_ai.core.Hepai import can_ron, can_ron_13
 
 if TYPE_CHECKING:
     from mahjong_ai.core.table import Table
@@ -37,7 +37,7 @@ def check_others_can_meld(table: Table, discarded_tile: Tile, from_player_id: in
         pid = (from_player_id + offset) % 4
         player = table.players[pid]
         # 榮和（搶先）
-        if can_ron(table, player, discarded_tile):
+        if can_ron_13(table, player, discarded_tile):
             if ask_player_action(player, "ron", discarded_tile):
 
                 #別家利用立直時打出的牌胡牌，立直就不成立，不用支付立直棒
@@ -133,7 +133,7 @@ def can_kakan(player: Player, tile: Tile) -> bool:
                 return True
     return False
 
-def can_ankan(player: Player, tile: Tile) -> Tile | None:
+def can_ankan(player: Player) -> Tile | None:
     """
     回傳可暗槓的牌（四張相同牌）或 None
     """
