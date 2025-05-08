@@ -22,12 +22,27 @@ class Player:
         self.melds: list[Meld] = []      # 副露紀錄
         self.points = 25000              # 初始分數
 
-        self.riichi_declared = False     # 是否已立直
-        self.ippatsu_possible = False    # 是否還處於一發可能狀態
         self.furiten = False             # 玩家是否振聽
+        self.furiten_temp = -1
+        self.win_tile: Tile = None       # 完成和牌的牌
 
-        self.seat_wind = 0               # 座風（0=東, 1=南, 2=西, 3=北）
+        self.seat_wind = player_id       # 座風（0=東, 1=南, 2=西, 3=北）
         self.round_wind = 0              # 場風（通常由 Table 控制）
+        self.last_chi_meld: Meld | None = None
+
+
+        self.is_tsumo = False	        # 是否為自摸和牌
+        self.is_riichi = False	        # 是否立直
+        self.is_ippatsu	= False	        # 是否一發
+        self.is_rinshan	= False	        # 是否嶺上開花
+        self.is_chankan	= False	        # 是否搶槓
+        self.is_haitei = False	        # 是否海底撈月
+        self.is_houtei = False	        # 是否河底撈魚
+        self.is_daburu_riichi = False   # 是否雙立直
+        self.is_nagashi_mangan = False  # 流局滿貫
+        self.is_tenhou = False          # 天和
+        self.is_renhou = False          # 人和
+        self.is_chiihou = False         # 地和
 
     def reset(self):
         """
@@ -37,11 +52,27 @@ class Player:
         self.river = River()
         self.melds = []
         self.points = 25000
-        self.riichi_declared = False
-        self.ippatsu_possible = False
         self.furiten = False
+        self.furiten_temp = -1
+        self.riichi_turn = -1
+
         self.seat_wind = 0
         self.round_wind = 0
+        self.last_chi_meld = None
+        self.win_tile = None
+
+        self.is_tsumo = False	
+        self.is_riichi = False	
+        self.is_ippatsu	= False	
+        self.is_rinshan	= False	
+        self.is_chankan	= False	
+        self.is_haitei = False	
+        self.is_houtei = False
+        self.is_daburu_riichi = False 
+        self.is_nagashi_mangan = False 
+        self.is_tenhou = False  
+        self.is_renhou = False  
+        self.is_chiihou = False 
 
     def draw_tile_from_wall(self, wall: Wall) -> Tile:
         """
@@ -135,7 +166,7 @@ class Player:
             melds_34.append(meld_ids)
         return agari.is_agari(tiles_34, melds_34)
 
-    def get_win_result(self, win_tile: Tile, is_tsumo: bool = True) -> dict:
+    def get_win_result(self, win_tile: Tile) -> dict:
         """
         使用 mahjong 套件完整計算胡牌結果。
         - win_tile: 和牌那張
@@ -148,8 +179,8 @@ class Player:
         win_tile_id = win_tile.get_all_136_ids()[0]
         melds = []
         config = HandConfig(
-            is_tsumo=is_tsumo,
-            is_riichi=self.riichi_declared,
+            is_tsumo=self.is_tsumo,
+            is_riichi=self.is_riichi,
             player_wind=self.seat_wind,
             round_wind=self.round_wind,
             has_dora=False,

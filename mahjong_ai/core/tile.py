@@ -1,7 +1,7 @@
 # mahjong_ai/core/tile.py
 
 class Tile:
-    def __init__(self, tile_type: str, tile_value: int):
+    def __init__(self, tile_type: str, tile_value: int, is_aka_dora: bool = False):
         """
         建立一張麻將牌。
         - tile_type: 'man' (萬子), 'pin' (筒子), 'sou' (索子), 'honor' (字牌)
@@ -9,16 +9,23 @@ class Tile:
         """
         self.tile_type = tile_type
         self.tile_value = tile_value
+        self.is_aka_dora = is_aka_dora
 
     def __str__(self):
         """
         以中文格式輸出，例如 "1萬"、"9筒"、"白"
         """
         if self.tile_type == 'man':
+            if self.is_aka_dora:
+                return f"紅{self.tile_value}萬"
             return f"{self.tile_value}萬"
         elif self.tile_type == 'pin':
+            if self.is_aka_dora:
+                return f"紅{self.tile_value}筒"
             return f"{self.tile_value}筒"
         elif self.tile_type == 'sou':
+            if self.is_aka_dora:
+                return f"紅{self.tile_value}索"
             return f"{self.tile_value}索"
         elif self.tile_type == 'honor':
             honor_names = {
@@ -54,6 +61,14 @@ class Tile:
         判斷兩張牌是否牌面相同（不考慮是哪一張複本）
         """
         return self.tile_type == other_tile.tile_type and self.tile_value == other_tile.tile_value
+    
+    def is_wind(self) -> bool:
+        """判斷是否為東南西北風牌"""
+        return self.tile_type == "z" and self.tile_value in [1, 2, 3, 4]  # 1=東, 2=南, 3=西, 4=北
+
+    def is_terminal_or_honor(self) -> bool:
+        """判斷是否為么九牌（1, 9, 字牌）"""
+        return (self.tile_type in ["m", "p", "s"] and self.tile_value in [1, 9]) or self.tile_type == "z"
 
     def __eq__(self, other):
         if not isinstance(other, Tile):
