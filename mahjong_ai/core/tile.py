@@ -136,3 +136,18 @@ class Tile:
         elif suit == 'z':
             return cls('honor', value)
         raise ValueError("Invalid suit")
+    @classmethod
+    def from_chinese_string(cls, s: str) -> "Tile":
+        honor_map = {'东': 1, '南': 2, '西': 3, '北': 4, '白': 5, '发': 6, '中': 7}
+        if s in honor_map:
+            return cls('honor', honor_map[s])
+        elif len(s) == 2:
+            value = int(s[0])
+            suit_char = s[1]
+            if suit_char == '万':
+                return cls('man', value)
+            elif suit_char == '饼':
+                return cls('pin', value)
+            elif suit_char == '索':
+                return cls('sou', value)
+        raise ValueError(f"Invalid tile string: {s}")
