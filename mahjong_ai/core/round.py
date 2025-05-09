@@ -23,10 +23,6 @@ class Round:
     def add_riichi_kyotaku(self):
         self.kyotaku += 1000
 
-    def pay_honba_bonus(self, winner: Player):
-        bonus = self.honba * 300
-        winner.points += bonus
-
     @property
     def round_number(self) -> int:
         return self.round_index + 1
