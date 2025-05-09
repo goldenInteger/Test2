@@ -51,10 +51,14 @@ class Table:
         # 正確流程摸打(紀錄一巡用)
         if not self.skip_discard and not self.skip_draw and not self.rinshan_draw:
             self.turn = self.turn + 1
-        print("玩家手牌：", [str(tile) for tile in player.hand.tiles])
+        print(f"玩家{player.player_id}手牌：", [str(tile) for tile in player.hand.tiles])
+        print(f"玩家{player.player_id}副露：", [str(tile) for tile in player.melds])
         # 摸牌
         draw_tile = Chupai.draw_phase(self, player)
         # 提前結束
+        if self.skip_discard:
+            self.skip_discard = False
+            return
         if self.round_over:
             return
         # TODO : 之後這裡要加出牌邏輯

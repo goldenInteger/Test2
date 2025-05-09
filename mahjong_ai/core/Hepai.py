@@ -49,32 +49,31 @@ def settle_win(table: "Table") -> dict:
         return {"error": "無法和牌"}
 
     # 加總得點（主體分）
-    point_gain = result["score"]["main"]
+    point_gain = result["score"]["total"]
     table.winner.points += point_gain
+    print(f"\n玩家{table.winner.player_id}加{point_gain}分")
 
-    # 場棒與供託
-    table.round.pay_honba_bonus(table.winner)
-    table.winner.points += table.round.kyotaku
+    # 供託
     table.round.kyotaku = 0
 
     # 分數計算
     if table.winner.is_tsumo:
-        # 自摸情況
-        cost = result["score"]
         for p in table.players:
             if p == table.winner:
                 continue
-            if p.is_dealer:
-                p.points -= cost["dealer"]  # 莊家付較多
+            if p.player_id == table.round.dealer_id:
+                cost = result["score"]["main"] + result["score"]["main_bonus"]
+                p.points -= cost
+                print(f"\n玩家{p.player_id}減{cost}分")
             else:
-                p.points -= cost["non_dealer"]  # 子家付較少
+                cost = result["score"]["additional"] +result["score"]["additional_bonus"]
+                p.points -= cost
+                print(f"\n玩家{p.player_id}減{cost}分")
     else:
-        # 榮和（放銃）
         loser: Player = table.players[table.last_discard_player_id]
-        cost = result["score"]
-        loser.points -= cost["main"]  # 放銃者付全部
-        bonus = table.round.honba * 300
-        loser.points -= bonus
+        cost = result["score"]["main"] + result["score"]["main_bonus"]
+        loser.points -= cost
+        print(f"\n玩家{loser.player_id}減{cost}分")
 
     return result
 
@@ -86,11 +85,10 @@ def can_declare_win(hand: list[Tile], melds: list[Meld], win_tile: Tile) -> bool
         win_tile_136 = convert_tile_to_136(win_tile)
         result = HandCalculator().estimate_hand_value(
             tiles_136, win_tile_136,
-            config=HandConfig(),
             melds=convert_melds_to_mahjong(melds)
         )
-        if result.error:
-            print(f" 和牌計算錯誤：{result.error}")
+        # if result.error:
+            # print(f" 和牌計算錯誤：{result.error}")
         return result.error is None
     except Exception as e:
         print(" 例外錯誤：", e)
@@ -152,10 +150,10 @@ def convert_tiles_to_136(tiles: list[Tile]) -> list[int]:
     pin = ''.join(encode_tile(t) for t in tiles if t.tile_type == 'pin')
     sou = ''.join(encode_tile(t) for t in tiles if t.tile_type == 'sou')
     honors = ''.join(str(t.tile_value) for t in tiles if t.tile_type == 'honor')
-
-    return TilesConverter.string_to_136_array(
+    result = TilesConverter.string_to_136_array(
         man=man, pin=pin, sou=sou, honors=honors, has_aka_dora=True
     )
+    return result
 
 
 def convert_tiles_to_34(tiles: list[Tile]) -> list[int]:
@@ -171,7 +169,9 @@ def convert_tile_to_136(tile: Tile) -> int:
 MELD_TYPE_MAP = {
     "CHII": MjMeld.CHI,
     "PON": MjMeld.PON,
-    "KAN": MjMeld.KAN,
+    "DAIMINKAN": MjMeld.KAN,      # 大明槓當作一般明槓處理
+    "ANKAN": MjMeld.KAN,
+    "KAKAN": MjMeld.KAN,
     "CHANKAN": MjMeld.CHANKAN,
     "NUKI": MjMeld.NUKI,
 }

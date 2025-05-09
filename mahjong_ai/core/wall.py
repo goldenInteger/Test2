@@ -24,7 +24,7 @@ class Wall:
         self.uradora_wall: list[Tile] = [self.tiles.pop() for _ in range(5)]
         self.rinshan_wall: list[Tile] = [self.tiles.pop() for _ in range(4)]
 
-        self.open_dora_wall: list[Tile] = self.draw_dora_indicators()
+        self.open_dora_wall: list[Tile] = [self.draw_dora_indicators()]
 
     def _create_full_wall(self) -> List[Tile]:
         """
@@ -74,11 +74,11 @@ class Wall:
             return None
         return self.tiles.pop(0)
 
-    def draw_dora_indicators(self) -> list[Tile]:
+    def draw_dora_indicators(self) -> Tile:
         """
         取得表寶牌表示牌
         """
-        return [self.dora_wall.pop(0)]
+        return self.dora_wall.pop(0)
 
     def draw_rinshan_tile(self, player: Player) -> Tile | None:
         """

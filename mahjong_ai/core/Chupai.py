@@ -96,9 +96,6 @@ def discard_phase(table: Table, tile: Tile) -> None:
     - 設定 last_discard_player
     - 檢查是否有其他玩家榮胡（含搶槓）
     """
-    if table.skip_discard:
-        table.skip_discard = False
-        return
     
     player = table.players[table.current_turn]
     if not player.discard_tile_from_hand(tile):
