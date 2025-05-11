@@ -32,7 +32,7 @@ def can_declare_riichi(table: Table, player: Player) -> bool:
     for m in player.melds:
         if m.meld_type != "ANKAN":
             print(f"玩家 {player.player_id} 非門清")
-            return True  # 有副露且不是暗槓
+            return False  # 有副露且不是暗槓
     if player.is_riichi:
         print(f"玩家 {player.player_id} 已經立直")
         return False
