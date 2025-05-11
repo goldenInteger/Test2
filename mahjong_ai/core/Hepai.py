@@ -102,6 +102,8 @@ def evaluate_win(table: Table) -> dict:
     dora_tiles_136 = convert_tiles_to_136(dora_tiles)
 
     config = HandConfig(
+        kyoutaku_number =  table.round.kyotaku // 1000,
+        tsumi_number = table.round.honba,
         is_tsumo = winner.is_tsumo,
         is_riichi = winner.is_riichi,
         player_wind = winner.seat_wind,
