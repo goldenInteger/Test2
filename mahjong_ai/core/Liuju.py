@@ -10,9 +10,9 @@ from mahjong_ai.core.Hepai import is_tenpai
 from mahjong_ai.core.wall import Wall
 
 
-def check_tenpai_bonus(players: list[Player]) -> None:
+def check_tenpai_bonus(players: list[Player]) -> list[int]:
     """
-    流局時的聽牌與未聽牌點數加減
+    流局時的聽牌與未聽牌點數加減，並回傳聽牌者的 player_id。
     """
     tenpai_players = [p for p in players if is_tenpai(p.hand.tiles)]
     noten_players = [p for p in players if not is_tenpai(p.hand.tiles)]
@@ -22,21 +22,29 @@ def check_tenpai_bonus(players: list[Player]) -> None:
 
     if len(tenpai_players) == 0 or len(noten_players) == 0:
         print(" 無點數移動：全聽或全不聽")
-        return
+        return [p.player_id for p in tenpai_players]
+
     if len(tenpai_players) == 1:
         transfer = 3000
         penalty = 1000
-    if len(tenpai_players) == 2:
+    elif len(tenpai_players) == 2:
         transfer = 1500
         penalty = 1500
-    if len(tenpai_players) == 3:
+    elif len(tenpai_players) == 3:
         transfer = 1000
         penalty = 3000
+    else:
+        # Just in case more than 3 (should not happen in 4-player mahjong)
+        transfer = 0
+        penalty = 0
 
     for p in tenpai_players:
         p.points += transfer
     for p in noten_players:
         p.points -= penalty
+
+    return [p.player_id for p in tenpai_players]
+
 
 def is_kyuushu_kyuuhai(player: Player) -> bool:
     """

@@ -76,8 +76,11 @@ class Round:
             table.winner = Hepai.can_nagashi_mangan(table)
             # 無法流局滿貫
             if Hepai.can_nagashi_mangan(table) == None:
-                Liuju.check_tenpai_bonus(table.players)
-                winner_id = -1
+                tenpai_ids = Liuju.check_tenpai_bonus(table.players)
+                if self.dealer_id in tenpai_ids:
+                    winner_id = self.dealer_id
+                else:
+                    winner_id = -1
             # 可以流局滿貫
             else:
                 winner_id = table.winner.player_id
@@ -102,7 +105,10 @@ class Round:
             for p in range(4):
                 table.players[(self.dealer_id + p) % 4].seat_wind = p
             self.dealer_continue_count = 0
-            self.honba = 0
+            if table.is_liuju:
+                self.honba += 1
+            else:
+                self.honba = 0
             print(f"【換親】親家 → 玩家{self.dealer_id}，進入 {self.get_display_string()}")
 
     def is_game_end(self) -> bool:
