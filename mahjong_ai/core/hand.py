@@ -23,7 +23,7 @@ class Hand:
         回傳 True 表示成功移除，False 表示未找到。
         """
         for existing_tile in self.tiles:
-            if existing_tile.is_same_tile(tile):
+            if existing_tile.is_same_tile(tile) and existing_tile.is_aka_dora == tile.is_aka_dora:
                 self.tiles.remove(existing_tile)
                 return True
         return False
@@ -38,18 +38,6 @@ class Hand:
             return (type_order.get(tile.tile_type, 4), tile.tile_value)
         
         self.tiles.sort(key=tile_sort_key)
-
-    def is_complete(self) -> bool:
-        """
-        檢查是否為 14 張手牌（代表能胡牌）。
-        """
-        return len(self.tiles) == 14
-
-    def is_ready_to_draw(self) -> bool:
-        """
-        檢查是否為可摸牌狀態（13 張）。
-        """
-        return len(self.tiles) % 3 == 1
 
     def to_helper_list(self) -> list[str]:
         """
@@ -66,15 +54,6 @@ class Hand:
         for tile in self.tiles:
             counts[tile.to_34_id()] += 1
         return counts
-
-    def calculate_shanten(self) -> int:
-        """
-        計算這副手牌的向聽數（距離胡牌還差幾張牌）。
-        使用 mahjong.shanten 套件進行計算。
-        """
-        from mahjong.shanten import Shanten
-        shanten_calc = Shanten()
-        return shanten_calc.calculate_shanten(self.to_counts_34())
 
     def __str__(self):
         """
