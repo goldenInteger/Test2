@@ -1,3 +1,5 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
 # mahjong_ai/core/player.py
 
 from mahjong.hand_calculating.hand import HandCalculator
@@ -10,6 +12,9 @@ from mahjong_ai.core.river import River
 from mahjong_ai.core.meld import Meld
 from mahjong.agari import Agari
 
+if TYPE_CHECKING:
+    from mahjong_ai.core.table import Table  # 僅供型別檢查工具使用，不會在執行時引入
+
 class Player:
     def __init__(self, player_id: int):
         """
@@ -17,6 +22,7 @@ class Player:
         - player_id: 玩家編號（0~3）
         """
         self.player_id = player_id
+        self.is_ai = False               # 是AI嗎
         self.hand = Hand()               # 手牌
         self.river = River()             # 捨牌區
         self.melds: list[Meld] = []      # 副露紀錄
@@ -89,6 +95,8 @@ class Player:
         if tile:
             self.hand.add_tile(tile)
         return tile
+    
+    
 
     def discard_tile_from_hand(self, tile: Tile) -> bool:
         """
@@ -123,3 +131,10 @@ class Player:
         加入一組副露（吃/碰/槓）到自己的紀錄中。
         """
         self.melds.append(meld)
+
+    """def chupai(self, table: Table) -> Tile:
+        if self.is_ai:
+        else:
+    def mingpai(self, action_type: str, table: Table):
+        if self.is_ai:
+        else:"""

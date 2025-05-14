@@ -26,6 +26,12 @@ class Hand:
             if existing_tile.is_same_tile(tile) and existing_tile.is_aka_dora == tile.is_aka_dora:
                 self.tiles.remove(existing_tile)
                 return True
+            if existing_tile.is_same_tile(tile) and not existing_tile.is_aka_dora:
+                self.tiles.remove(existing_tile)
+                return True
+            if existing_tile.is_same_tile(tile):
+                self.tiles.remove(existing_tile)
+                return True
         return False
 
     def sort_hand(self) -> None:
