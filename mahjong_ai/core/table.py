@@ -92,7 +92,6 @@ class Table:
 
         # 丟牌
         Chupai.discard_phase(self, discard_tile)
-
         # 四風連打
         if self.turn == 4 and not self.is_mingpai:
             if Liuju.is_sufon_renda(self.players):
