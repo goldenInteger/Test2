@@ -22,12 +22,27 @@ class Player:
         self.melds: list[Meld] = []      # 副露紀錄
         self.points = 25000              # 初始分數
 
-        self.riichi_declared = False     # 是否已立直
-        self.ippatsu_possible = False    # 是否還處於一發可能狀態
         self.furiten = False             # 玩家是否振聽
+        self.furiten_temp = -1
+        self.win_tile: Tile = None       # 完成和牌的牌
 
-        self.seat_wind = 0               # 座風（0=東, 1=南, 2=西, 3=北）
+        self.seat_wind = player_id       # 座風（0=東, 1=南, 2=西, 3=北）
         self.round_wind = 0              # 場風（通常由 Table 控制）
+        self.last_chi_meld: Meld | None = None
+
+
+        self.is_tsumo = False	        # 是否為自摸和牌
+        self.is_riichi = False	        # 是否立直
+        self.is_ippatsu	= False	        # 是否一發
+        self.is_rinshan	= False	        # 是否嶺上開花
+        self.is_chankan	= False	        # 是否搶槓
+        self.is_haitei = False	        # 是否海底撈月
+        self.is_houtei = False	        # 是否河底撈魚
+        self.is_daburu_riichi = False   # 是否雙立直
+        self.is_nagashi_mangan = False  # 流局滿貫
+        self.is_tenhou = False          # 天和
+        self.is_renhou = False          # 人和
+        self.is_chiihou = False         # 地和
 
     def reset(self):
         """
@@ -36,12 +51,26 @@ class Player:
         self.hand = Hand()
         self.river = River()
         self.melds = []
-        self.points = 25000
-        self.riichi_declared = False
-        self.ippatsu_possible = False
         self.furiten = False
-        self.seat_wind = 0
+        self.furiten_temp = -1
+        self.riichi_turn = -1
+
         self.round_wind = 0
+        self.last_chi_meld = None
+        self.win_tile = None
+
+        self.is_tsumo = False	
+        self.is_riichi = False	
+        self.is_ippatsu	= False	
+        self.is_rinshan	= False	
+        self.is_chankan	= False	
+        self.is_haitei = False	
+        self.is_houtei = False
+        self.is_daburu_riichi = False 
+        self.is_nagashi_mangan = False 
+        self.is_tenhou = False  
+        self.is_renhou = False  
+        self.is_chiihou = False 
 
     def draw_tile_from_wall(self, wall: Wall) -> Tile:
         """
@@ -56,7 +85,7 @@ class Player:
         """
         槓後從牌堆尾端抽嶺上牌。
         """
-        tile = wall.draw_rinshan_tile()
+        tile = wall.draw_rinshan_tile(self)
         if tile:
             self.hand.add_tile(tile)
         return tile
@@ -89,89 +118,8 @@ class Player:
             tiles[i] -= 1
         self.furiten = False
 
-    def declare_riichi(self) -> bool:
-        """
-        嘗試宣告立直（條件簡化版）：
-        - 未立直
-        - 分數足夠
-        - 為聽牌狀態
-        成功則扣1000點並啟用一發狀態。
-        """
-        if self.riichi_declared or self.points < 1000:
-            return False
-        from mahjong.shanten import Shanten
-        tiles_34 = self.hand.to_counts_34()
-        shanten = Shanten().calculate_shanten(tiles_34)
-        if shanten == 0:
-            self.riichi_declared = True
-            self.points -= 1000
-            self.ippatsu_possible = True
-            return True
-        return False
-
     def add_meld(self, meld: Meld) -> None:
         """
         加入一組副露（吃/碰/槓）到自己的紀錄中。
         """
         self.melds.append(meld)
-
-    def receive_tile(self, tile: Tile) -> None:
-        """
-        把一張牌直接加入手牌，通常用於副露後獲得的牌。
-        """
-        self.hand.add_tile(tile)
-
-    def can_win(self) -> bool:
-        """
-        使用 mahjong 套件判斷目前手牌是否可胡。
-        副露支援中（以 melds 計算），不考慮和了形式（如自摸/榮和）。
-        """
-        agari = Agari()
-        tiles_34 = self.hand.to_counts_34()
-        # 傳入副露 tiles（每副 meld 都拆開）
-        melds_34 = []
-        for meld in self.melds:
-            meld_ids = [tile.to_34_id() for tile in meld.tiles]
-            melds_34.append(meld_ids)
-        return agari.is_agari(tiles_34, melds_34)
-
-    def get_win_result(self, win_tile: Tile, is_tsumo: bool = True) -> dict:
-        """
-        使用 mahjong 套件完整計算胡牌結果。
-        - win_tile: 和牌那張
-        - is_tsumo: 是否為自摸（否則為榮和）
-
-        回傳 dict，包含番種名稱、番數、得點等資訊。
-        """
-        calculator = HandCalculator()
-        tiles_136 = [tile.get_all_136_ids()[0] for tile in self.hand.get_tile_objects()]
-        win_tile_id = win_tile.get_all_136_ids()[0]
-        melds = []
-        config = HandConfig(
-            is_tsumo=is_tsumo,
-            is_riichi=self.riichi_declared,
-            player_wind=self.seat_wind,
-            round_wind=self.round_wind,
-            has_dora=False,
-        )
-        result = calculator.estimate_hand_value(
-            TilesConverter.to_34_array(tiles_136),
-            win_tile_id=win_tile_id,
-            melds=melds,
-            config=config
-        )
-        if result.error:
-            return {"error": result.error.as_string()}
-        return {
-            "han": result.han,
-            "fu": result.fu,
-            "cost": result.cost.__dict__,
-            "yaku": [(y.name, y.han) for y in result.yaku],
-            "fu_details": result.fu_details
-        }
-    def show_hand(self):
-        """
-        印出玩家手牌的中文表示。
-        """
-        tiles_str = ' '.join(str(tile) for tile in self.hand.tiles)
-        print(f"玩家 {self.player_id} 的手牌：{tiles_str}")
