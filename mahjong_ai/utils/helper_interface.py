@@ -69,7 +69,7 @@ def mingpai_mahjong_helper(hand_tiles: list[Tile], melds: list = None, drawn_til
         input_str += f" + {drawn_str}"
 
     print(input_str)
-    exe_path = r"C:\Pywork\Test2\mahjong-helper\mahjong-helper\mahjong-helper.exe"
+    exe_path = r"C:\Mahjong\mahjong-helper\mahjong-helper.exe"
 
     try:
         result = subprocess.run(
@@ -93,7 +93,7 @@ def mingpai_mahjong_helper(hand_tiles: list[Tile], melds: list = None, drawn_til
 def call_mahjong_helper(hand_tiles: list[Tile], melds: list = None, river_tiles: list[Tile] = []) -> str:
     input_str = format_tiles_for_helper(hand_tiles, melds)
     print(input_str)
-    exe_path = r"C:\Pywork\Test2\mahjong-helper\mahjong-helper\mahjong-helper.exe"
+    exe_path = r"C:\Mahjong\mahjong-helper\mahjong-helper.exe"
 
     try:
         result = subprocess.run(
@@ -114,7 +114,7 @@ def call_mahjong_helper(hand_tiles: list[Tile], melds: list = None, river_tiles:
     
 def test_call_mahjong_helper(input_str: str, river_tiles: list[Tile] = []) -> str:
 
-    exe_path = r"C:\Pywork\Test2\mahjong-helper\mahjong-helper\mahjong-helper.exe"
+    exe_path = r"C:\Mahjongmahjong-helper\mahjong-helper.exe"
 
     try:
         result = subprocess.run(

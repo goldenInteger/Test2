@@ -2,15 +2,15 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 # mahjong_ai/core/player.py
 
-from mahjong.hand_calculating.hand import HandCalculator
-from mahjong.hand_calculating.hand_config import HandConfig
-from mahjong.tile import TilesConverter
+from mahjong.mahjong.hand_calculating.hand import HandCalculator
+from mahjong.mahjong.hand_calculating.hand_config import HandConfig
+from mahjong.mahjong.tile import TilesConverter
 from mahjong_ai.core.hand import Hand
 from mahjong_ai.core.tile import Tile
 from mahjong_ai.core.wall import Wall
 from mahjong_ai.core.river import River
 from mahjong_ai.core.meld import Meld
-from mahjong.agari import Agari
+from mahjong.mahjong.agari import Agari
 
 if TYPE_CHECKING:
     from mahjong_ai.core.table import Table  # 僅供型別檢查工具使用，不會在執行時引入
