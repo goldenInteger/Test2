@@ -3,11 +3,11 @@ from typing import TYPE_CHECKING
 # Mahjong 和牌邏輯整合模組（完整包裝）
 
 # TODO : 解決例外錯誤： negative shift count
-from mahjong.tile import TilesConverter
-from mahjong.hand_calculating.hand import HandCalculator
-from mahjong.hand_calculating.hand_config import HandConfig
-from mahjong.shanten import Shanten
-from mahjong.meld import Meld as MjMeld
+from mahjong.mahjong.tile import TilesConverter
+from mahjong.mahjong.hand_calculating.hand import HandCalculator
+from mahjong.mahjong.hand_calculating.hand_config import HandConfig
+from mahjong.mahjong.shanten import Shanten
+from mahjong.mahjong.meld import Meld as MjMeld
 
 if TYPE_CHECKING:
     from mahjong_ai.core.table import Table
