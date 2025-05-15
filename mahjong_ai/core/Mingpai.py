@@ -47,6 +47,8 @@ def check_others_can_meld(table: Table, discarded_tile: Tile, from_player_id: in
         if can_ron_13(table, player, discarded_tile):
             if ask_player_action(player, "ron", discarded_tile):
 
+                player.hand.add_tile(discarded_tile)
+
                 #別家利用立直時打出的牌胡牌，立直就不成立，不用支付立直棒
                 if table.players[from_player_id].riichi_turn == table.turn:
                     table.players[from_player_id].riichi_turn = -1
@@ -103,6 +105,7 @@ def try_chankan(table: Table, tile: Tile, from_player_id: int) -> bool:
         player = table.players[pid]
         if can_ron_13(table, player, tile):
             if ask_player_action(player, "chankan", tile):
+                player.hand.add_tile(tile)
                 table.winner = player
                 table.last_discard_player_id = from_player_id
                 player.is_chankan = True
