@@ -15,6 +15,9 @@ from mahjong.agari import Agari
 if TYPE_CHECKING:
     from mahjong_ai.core.table import Table  # 僅供型別檢查工具使用，不會在執行時引入
 
+if TYPE_CHECKING:
+    from mahjong_ai.core.table import Table  # 僅供型別檢查工具使用，不會在執行時引入
+
 class Player:
     def __init__(self, player_id: int):
         """
@@ -22,6 +25,7 @@ class Player:
         - player_id: 玩家編號（0~3）
         """
         self.player_id = player_id
+        self.is_ai = False               # 是AI嗎
         self.is_ai = False               # 是AI嗎
         self.hand = Hand()               # 手牌
         self.river = River()             # 捨牌區
@@ -95,6 +99,8 @@ class Player:
         if tile:
             self.hand.add_tile(tile)
         return tile
+    
+    
     
     
 
@@ -176,6 +182,7 @@ class Player:
         if (self.hasyaku) :
             text_output = mingpai_mahjong_helper(self.hand.tiles, self.melds, tile)
             return pon_mingpai_top_two_lines(text_output)
+        
         return False
 
 
