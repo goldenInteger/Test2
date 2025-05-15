@@ -28,6 +28,11 @@ def ask_player_action(player: Player, action_type: str, tile: Tile, options: lis
     else:
         return player.strategy.should_call(action_type, tile, options)
     """
+    if (action_type == "pon") :
+        return player.pon(tile)
+    if (action_type == "chi") :
+        return player.chi(tile)
+    
     print(action_type)
     if options == None:
         return True
@@ -46,6 +51,8 @@ def check_others_can_meld(table: Table, discarded_tile: Tile, from_player_id: in
         # 榮和（搶先）
         if can_ron_13(table, player, discarded_tile):
             if ask_player_action(player, "ron", discarded_tile):
+
+                player.hand.add_tile(discarded_tile)
 
                 #別家利用立直時打出的牌胡牌，立直就不成立，不用支付立直棒
                 if table.players[from_player_id].riichi_turn == table.turn:
@@ -89,11 +96,11 @@ def check_others_can_meld(table: Table, discarded_tile: Tile, from_player_id: in
     player = table.players[pid]
     chi_sets = can_chi_sets(player, discarded_tile)
     if not player.is_riichi and chi_sets:
-        chosen_set = ask_player_action(player, "chi", discarded_tile, chi_sets)
-        if chosen_set:
-            make_chi(table, player, discarded_tile, from_player_id, chosen_set)
-            return [(player.player_id, "chi")]
-
+        if (ask_player_action(player, "chi", discarded_tile, chi_sets)):
+            chosen_set = ask_player_action(player, "chi", discarded_tile, chi_sets)
+            if chosen_set:
+                make_chi(table, player, discarded_tile, from_player_id, chosen_set)
+                return [(player.player_id, "chi")]
     return []
 
 # === 搶槓判定 ===
@@ -103,6 +110,7 @@ def try_chankan(table: Table, tile: Tile, from_player_id: int) -> bool:
         player = table.players[pid]
         if can_ron_13(table, player, tile):
             if ask_player_action(player, "chankan", tile):
+                player.hand.add_tile(tile)
                 table.winner = player
                 table.last_discard_player_id = from_player_id
                 player.is_chankan = True

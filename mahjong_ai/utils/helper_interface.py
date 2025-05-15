@@ -1,4 +1,5 @@
 from mahjong_ai.core.tile import Tile
+from mahjong_ai.core.hand import Hand
 import subprocess
 import json
 import os
@@ -88,7 +89,93 @@ def mingpai_mahjong_helper(hand_tiles: list[Tile], melds: list = None, drawn_til
         print("[mahjong-helper] Unexpected error:", e)
         return ""
     
+import re
 
+def pon_mingpai_top_two_lines(output_text: str) -> bool | list:
+    """
+    從輸出中抓出前兩個開頭為整數的行，並比較其整數值。
+    回傳 True 表示第一個數字大於第二個數字，否則 False。
+    """
+    lines = output_text.splitlines()
+    numbers = []
+
+    for line in lines:
+        line = line.strip()
+        match = re.match(r"^(\d+)\[", line)
+        if match:
+            numbers.append(int(match.group(1)))
+            if len(numbers) == 2:
+                break
+
+    if len(numbers) < 2:
+        print("[compare_mingpai_top_two_lines] 資料不足")
+        return False
+
+    return numbers[0] < numbers[1]
+import re
+
+def parse_tile_group(tile_str: str) -> list[int]:
+    print(f"[DEBUG] tile_str to parse: {repr(tile_str)}")
+    match = re.fullmatch(r'(\d{2,3})([万饼索mps])', tile_str)
+    if not match:
+        print("❌ 無法解析 tile_str")
+        return []
+    digits, _ = match.groups()
+    return [int(ch) for ch in digits]
+
+import re
+
+
+def chi_mingpai_top_two_lines(output_text: str, tile: Tile) -> bool | list:
+    """
+    比較開頭兩個數字，若第二個 > 第一個，解析第二行的吃牌資訊（例如45萬吃）並回傳組成list。
+    """
+    lines = output_text.splitlines()
+    numbers = []
+    matched_lines = []
+
+    for line in lines:
+        line = line.strip()
+        # 僅比對行首開頭的數字，且後面是空白或中括號
+        match = re.match(r"^(\d+)(?:\s|\[)", line)
+        if match:
+            num = int(match.group(1))
+            numbers.append(num)
+            matched_lines.append(line)
+            if len(numbers) == 2:
+                break
+
+    if len(numbers) < 2:
+        print("[compare_mingpai_top_two_lines] 資料不足")
+        return False
+
+    print("找到的前兩行開頭數字:", numbers[0], numbers[1])
+
+    if numbers[1] > numbers[0]:
+        chi_match = re.search(r"((\d{2,3})[万饼索mps])吃", matched_lines[1])
+        if chi_match:
+            chi_digits = chi_match.group(2)  # 只抓數字，例如 "57"
+            chi_suit = chi_match.group(1)[-1]  # 抓花色，例如 "万"
+            tile_str = str(tile)  # 例如 "6万"
+            
+            # 驗證 tile 是同樣花色
+            if tile_str[-1] != chi_suit:
+                print("❌ tile 花色與吃牌不符:", tile_str[-1], "!=", chi_suit)
+                return False
+
+            full_group = chi_digits + tile_str[0] + chi_suit  # 例如 "576万"
+            print(f"[DEBUG] chi_str = {full_group}")
+            chi_tiles = parse_tile_group(full_group)
+            return chi_tiles
+    return False
+
+
+
+
+
+
+import re
+from mahjong_ai.core.tile import Tile
 
 def call_mahjong_helper(hand_tiles: list[Tile], melds: list = None, river_tiles: list[Tile] = []) -> str:
     input_str = format_tiles_for_helper(hand_tiles, melds)

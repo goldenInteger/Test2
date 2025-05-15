@@ -81,7 +81,8 @@ def settle_win(table: "Table") -> dict:
 
 def can_declare_win(hand: list[Tile], melds: list[Meld], win_tile: Tile) -> bool:
     try:
-        tiles_136 = convert_tiles_to_136(hand)
+        all_tiles = hand + [t for meld in melds for t in meld.tiles]
+        tiles_136 = convert_tiles_to_136(all_tiles)
         win_tile_136 = convert_tile_to_136(win_tile)
         result = HandCalculator().estimate_hand_value(
             tiles_136, win_tile_136,
@@ -96,7 +97,8 @@ def can_declare_win(hand: list[Tile], melds: list[Meld], win_tile: Tile) -> bool
 
 def evaluate_win(table: Table) -> dict:
     winner = table.winner
-    tiles_136 = convert_tiles_to_136(winner.hand.tiles)
+    all_tiles = winner.hand.tiles + [t for meld in winner.melds for t in meld.tiles]
+    tiles_136 = convert_tiles_to_136(all_tiles)
     win_tile_136 = convert_tile_to_136(winner.win_tile)
     dora_tiles = table.wall.open_dora_wall + table.wall.uradora_wall
     dora_tiles_136 = convert_tiles_to_136(dora_tiles)
