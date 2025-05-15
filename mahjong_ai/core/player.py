@@ -1,3 +1,5 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
 # mahjong_ai/core/player.py
 
 from mahjong.hand_calculating.hand import HandCalculator
@@ -10,6 +12,9 @@ from mahjong_ai.core.river import River
 from mahjong_ai.core.meld import Meld
 from mahjong.agari import Agari
 
+if TYPE_CHECKING:
+    from mahjong_ai.core.table import Table  # 僅供型別檢查工具使用，不會在執行時引入
+
 class Player:
     def __init__(self, player_id: int):
         """
@@ -17,6 +22,7 @@ class Player:
         - player_id: 玩家編號（0~3）
         """
         self.player_id = player_id
+        self.is_ai = False               # 是AI嗎
         self.hand = Hand()               # 手牌
         self.river = River()             # 捨牌區
         self.melds: list[Meld] = []      # 副露紀錄
@@ -29,7 +35,7 @@ class Player:
         self.seat_wind = player_id       # 座風（0=東, 1=南, 2=西, 3=北）
         self.round_wind = 0              # 場風（通常由 Table 控制）
         self.last_chi_meld: Meld | None = None
-
+        self.hasyaku = False
 
         self.is_tsumo = False	        # 是否為自摸和牌
         self.is_riichi = False	        # 是否立直
@@ -89,6 +95,8 @@ class Player:
         if tile:
             self.hand.add_tile(tile)
         return tile
+    
+    
 
     def discard_tile_from_hand(self, tile: Tile) -> bool:
         """
@@ -123,3 +131,51 @@ class Player:
         加入一組副露（吃/碰/槓）到自己的紀錄中。
         """
         self.melds.append(meld)
+
+    """def chupai(self, table: Table) -> Tile:
+        if self.is_ai:
+        else:
+    def mingpai(self, action_type: str, table: Table):
+        if self.is_ai:
+        else:"""
+    def chi(self, tile: Tile) -> bool | list:
+        from mahjong_ai.utils.helper_interface import mingpai_mahjong_helper, chi_mingpai_top_two_lines
+        if (self.hasyaku) :
+            text_output = mingpai_mahjong_helper(self.hand.tiles, self.melds, tile)
+            return chi_mingpai_top_two_lines(text_output, tile)
+        return False
+
+    def pon(self, tile: Tile) -> bool:
+        from mahjong_ai.utils.helper_interface import mingpai_mahjong_helper, pon_mingpai_top_two_lines
+        if (self.hasyaku) :
+            text_output = mingpai_mahjong_helper(self.hand.tiles, self.melds, tile)
+            return pon_mingpai_top_two_lines(text_output)
+        
+    # 至少要有兩張手牌一樣
+        if sum(1 for t in self.hand.tiles if t.is_same_tile(tile)) < 2:
+            return False
+
+        # 如果是字牌才檢查風牌限制
+        if tile.tile_type == 'honor':
+            # 東=1, 南=2, 西=3, 北=4, 白=5, 發=6, 中=7
+            valid_values = []
+
+            # 自風 & 場風（東=0, 南=1, 西=2, 北=3）
+            wind_map = {0: 1, 1: 2, 2: 3, 3: 4}
+            valid_values.append(wind_map.get(self.seat_wind))
+            valid_values.append(wind_map.get(self.round_wind))
+
+            # 中白發永遠可碰（5,6,7）
+            valid_values += [5, 6, 7]
+
+            if tile.tile_value not in valid_values:
+                return False
+          
+            self.hasyaku = True
+
+        if (self.hasyaku) :
+            text_output = mingpai_mahjong_helper(self.hand.tiles, self.melds, tile)
+            return pon_mingpai_top_two_lines(text_output)
+        return False
+
+

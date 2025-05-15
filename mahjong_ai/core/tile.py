@@ -17,19 +17,19 @@ class Tile:
         """
         if self.tile_type == 'man':
             if self.is_aka_dora:
-                return f"紅{self.tile_value}萬"
-            return f"{self.tile_value}萬"
+                return f"紅{self.tile_value}万"
+            return f"{self.tile_value}万"
         elif self.tile_type == 'pin':
             if self.is_aka_dora:
-                return f"紅{self.tile_value}筒"
-            return f"{self.tile_value}筒"
+                return f"紅{self.tile_value}饼"
+            return f"{self.tile_value}饼"
         elif self.tile_type == 'sou':
             if self.is_aka_dora:
                 return f"紅{self.tile_value}索"
             return f"{self.tile_value}索"
         elif self.tile_type == 'honor':
             honor_names = {
-                1: '東', 2: '南', 3: '西', 4: '北', 5: '白', 6: '發', 7: '中'
+                1: '东', 2: '南', 3: '西', 4: '北', 5: '白', 6: '发', 7: '中'
             }
             return honor_names.get(self.tile_value, '?')
         else:
