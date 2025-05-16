@@ -3,6 +3,7 @@ from mahjong_ai.core.player import Player
 from mahjong_ai.core.tile import Tile
 from mahjong_ai.core import Chupai, Mingpai, riichi, Hepai, Liuju
 from mahjong_ai.core.round import Round
+import random
 # TODO: 出牌邏輯
 
 class Table:
@@ -24,6 +25,8 @@ class Table:
 
     def run_game_loop(self):
         print(" 開始整場對局")
+        main_player_id = random.randint(0, 3)
+        self.players[main_player_id].is_ai = True
         while not self.round.is_game_end():
             self.round.start_round(self)
             while not self.round_over:
