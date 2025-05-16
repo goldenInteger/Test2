@@ -68,6 +68,7 @@ class Player:
         self.round_wind = 0
         self.last_chi_meld = None
         self.win_tile = None
+        self.hasyaku = False
 
         self.is_tsumo = False	
         self.is_riichi = False	
