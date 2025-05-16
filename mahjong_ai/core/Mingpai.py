@@ -32,6 +32,8 @@ def ask_player_action(player: Player, action_type: str, tile: Tile, options: lis
         return player.pon(tile)
     if (action_type == "chi") :
         return player.chi(tile)
+    if (action_type == "daiminkan") :
+        return player.kan(tile)
     
     print(action_type)
     if options == None:
