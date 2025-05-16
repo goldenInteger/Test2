@@ -151,6 +151,9 @@ class Player:
             return chi_mingpai_top_two_lines(text_output, tile)
         return False
 
+    def kan(self, tile: Tile) -> bool:
+        return self.hasyaku
+
     def pon(self, tile: Tile) -> bool:
         from mahjong_ai.utils.helper_interface import mingpai_mahjong_helper, pon_mingpai_top_two_lines
         if (self.hasyaku) :
