@@ -145,19 +145,41 @@ class Player:
     def mingpai(self, action_type: str, table: Table):
         if self.is_ai:
         else:"""
+    def do_has_yaku(self) -> bool:
+        """
+        判斷手牌中是否存在三張相同的役牌（中、發、白、自風、場風）。
+        """
+        from collections import Counter
+
+        # 定義風牌對照表：seat_wind 和 round_wind 轉換成 tile_value
+        wind_map = {0: 1, 1: 2, 2: 3, 3: 4}
+        yaku_values = {5, 6, 7}  # 白=5, 發=6, 中=7
+        yaku_values.add(wind_map.get(self.seat_wind))
+        yaku_values.add(wind_map.get(self.round_wind))
+
+        # 統計役牌在手牌中的數量
+        counter = Counter()
+        for tile in self.hand.tiles:
+            if tile.tile_type == 'honor' and tile.tile_value in yaku_values:
+                counter[(tile.tile_type, tile.tile_value)] += 1
+
+        # 檢查是否有任一種牌數量達到 3 張
+        return any(count >= 3 for count in counter.values())
+    
+
     def chi(self, tile: Tile) -> bool | list:
         from mahjong_ai.utils.helper_interface import mingpai_mahjong_helper, chi_mingpai_top_two_lines
-        if (self.hasyaku) :
+        if (self.hasyaku or self.do_has_yaku()) :
             text_output = mingpai_mahjong_helper(self.hand.tiles, self.melds, tile)
             return chi_mingpai_top_two_lines(text_output, tile)
         return False
 
     def kan(self, tile: Tile) -> bool:
-        return self.hasyaku
+        return (self.hasyaku or self.do_has_yaku())
 
     def pon(self, tile: Tile) -> bool:
         from mahjong_ai.utils.helper_interface import mingpai_mahjong_helper, pon_mingpai_top_two_lines
-        if (self.hasyaku) :
+        if (self.hasyaku or self.do_has_yaku()) :
             text_output = mingpai_mahjong_helper(self.hand.tiles, self.melds, tile)
             return pon_mingpai_top_two_lines(text_output)
         
@@ -183,7 +205,7 @@ class Player:
           
             self.hasyaku = True
 
-        if (self.hasyaku) :
+        if ((self.hasyaku or self.do_has_yaku())) :
             text_output = mingpai_mahjong_helper(self.hand.tiles, self.melds, tile)
             return pon_mingpai_top_two_lines(text_output)
         
