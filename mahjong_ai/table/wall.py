@@ -3,11 +3,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import random
-from mahjong_ai.core.tile import Tile
+from mahjong_ai.table.tile import Tile
 from typing import List, Optional
 
 if TYPE_CHECKING:
-    from mahjong_ai.core.table import Player
+    from mahjong_ai.table.table import Player
 class Wall:
     def __init__(self):
         self.first_rinshan_player: Player = None

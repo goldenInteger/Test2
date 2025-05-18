@@ -1,8 +1,8 @@
-from mahjong_ai.core.wall import Wall
-from mahjong_ai.core.player import Player
-from mahjong_ai.core.tile import Tile
-from mahjong_ai.core import Chupai, Mingpai, riichi, Hepai, Liuju
-from mahjong_ai.core.round import Round
+from mahjong_ai.table.wall import Wall
+from mahjong_ai.table.player import Player
+from mahjong_ai.table.tile import Tile
+from mahjong_ai.table import Chupai, Mingpai, riichi, Hepai, Liuju
+from mahjong_ai.table.round import Round
 import random
 # TODO: 出牌邏輯
 

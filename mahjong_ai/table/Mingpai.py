@@ -5,13 +5,13 @@ from typing import TYPE_CHECKING
 # TODO: 
 
 from typing import List, Tuple
-from mahjong_ai.core.tile import Tile
-from mahjong_ai.core.meld import Meld, MeldType
-from mahjong_ai.core.player import Player
-from mahjong_ai.core.Hepai import can_ron, can_ron_13
+from mahjong_ai.table.tile import Tile
+from mahjong_ai.table.meld import Meld, MeldType
+from mahjong_ai.table.player import Player
+from mahjong_ai.table.Hepai import can_ron, can_ron_13
 
 if TYPE_CHECKING:
-    from mahjong_ai.core.table import Table
+    from mahjong_ai.table.table import Table
 
 # === 玩家行為詢問介面 ===
 def ask_player_action(player: Player, action_type: str, tile: Tile, options: list = None) -> bool | list:

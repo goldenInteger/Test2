@@ -2,12 +2,12 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mahjong_ai.core.table import Table
+    from mahjong_ai.table.table import Table
 
-from mahjong_ai.core.tile import Tile
-from mahjong_ai.core.player import Player
-from mahjong_ai.core.Hepai import is_tenpai
-from mahjong_ai.core.wall import Wall
+from mahjong_ai.table.tile import Tile
+from mahjong_ai.table.player import Player
+from mahjong_ai.table.Hepai import is_tenpai
+from mahjong_ai.table.wall import Wall
 
 
 def check_tenpai_bonus(players: list[Player]) -> list[int]:

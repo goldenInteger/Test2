@@ -2,12 +2,12 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 # mahjong_ai/core/round.py
 
-from mahjong_ai.core.wall import Wall
-from mahjong_ai.core.player import Player
-from mahjong_ai.core import Hepai, Liuju
+from mahjong_ai.table.wall import Wall
+from mahjong_ai.table.player import Player
+from mahjong_ai.table import Hepai, Liuju
 
 if TYPE_CHECKING:
-    from mahjong_ai.core.table import Table  # 僅供型別檢查工具使用，不會在執行時引入
+    from mahjong_ai.table.table import Table  # 僅供型別檢查工具使用，不會在執行時引入
 
 class Round:
     WINDS = ['東', '南', '西', '北']

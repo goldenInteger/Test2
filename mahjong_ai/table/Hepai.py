@@ -10,12 +10,12 @@ from mahjong.shanten import Shanten
 from mahjong.meld import Meld as MjMeld
 
 if TYPE_CHECKING:
-    from mahjong_ai.core.table import Table
+    from mahjong_ai.table.table import Table
 
-from mahjong_ai.core.tile import Tile
-from mahjong_ai.core.meld import Meld, MeldType
-from mahjong_ai.core.hand import Hand
-from mahjong_ai.core.player import Player
+from mahjong_ai.table.tile import Tile
+from mahjong_ai.table.meld import Meld, MeldType
+from mahjong_ai.table.hand import Hand
+from mahjong_ai.table.player import Player
 
 # === 和牌流程判定 ===
 

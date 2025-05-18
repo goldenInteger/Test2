@@ -1,13 +1,13 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 # mahjong_ai/core/draw_discard.py
-from mahjong_ai.core.Mingpai import check_others_can_meld, can_ankan, can_kakan, make_ankan, make_kakan, ask_player_action, try_chankan
-from mahjong_ai.core import riichi
-from mahjong_ai.core.Hepai import can_tsumo, can_ron, settle_win
-from mahjong_ai.core.tile import Tile
-from mahjong_ai.core.player import Player
+from mahjong_ai.table.Mingpai import check_others_can_meld, can_ankan, can_kakan, make_ankan, make_kakan, ask_player_action, try_chankan
+from mahjong_ai.table import riichi
+from mahjong_ai.table.Hepai import can_tsumo, can_ron, settle_win
+from mahjong_ai.table.tile import Tile
+from mahjong_ai.table.player import Player
 if TYPE_CHECKING:
-    from mahjong_ai.core.table import Table
+    from mahjong_ai.table.table import Table
 
 
 def draw_phase(table: Table, player: Player) -> Tile:

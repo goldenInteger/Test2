@@ -1,6 +1,6 @@
 # mahjong_ai/core/river.py
 
-from mahjong_ai.core.tile import Tile
+from mahjong_ai.table.tile import Tile
 
 class DiscardedTile:
     def __init__(self, tile: Tile, is_riichi: bool = False, is_called: bool = False):

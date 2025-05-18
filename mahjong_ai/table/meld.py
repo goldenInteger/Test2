@@ -1,6 +1,6 @@
 # mahjong_ai/core/meld.py
 from enum import Enum
-from mahjong_ai.core.tile import Tile
+from mahjong_ai.table.tile import Tile
 
 class MeldType(Enum):
     CHII = "Chi"            # 吃
