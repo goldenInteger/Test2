@@ -2,12 +2,12 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 # mahjong_ai/core/riichi.py
 
-from mahjong_ai.core.player import Player
-from mahjong_ai.core.tile import Tile
-from mahjong_ai.core.Hepai import is_tenpai, settle_win
+from mahjong_ai.table.player import Player
+from mahjong_ai.table.tile import Tile
+from mahjong_ai.table.Hepai import is_tenpai, settle_win
 
 if TYPE_CHECKING:
-    from mahjong_ai.core.table import Table
+    from mahjong_ai.table.table import Table
 
 def get_riichi_discard_options(player: Player) -> list[Tile]:
     """

@@ -1,10 +1,10 @@
-from mahjong_ai.core.tile import Tile
-from mahjong_ai.core.hand import Hand
+from mahjong_ai.table.tile import Tile
+from mahjong_ai.table.hand import Hand
 import subprocess
 import json
 import os
 from collections import defaultdict, Counter
-from mahjong_ai.core.player import Player
+from mahjong_ai.table.player import Player
 
 
 
@@ -175,7 +175,7 @@ def chi_mingpai_top_two_lines(output_text: str, tile: Tile) -> bool | list:
 
 
 import re
-from mahjong_ai.core.tile import Tile
+from mahjong_ai.table.tile import Tile
 
 def call_mahjong_helper(hand_tiles: list[Tile], melds: list = None, river_tiles: list[Tile] = []) -> str:
     input_str = format_tiles_for_helper(hand_tiles, melds)
@@ -222,7 +222,7 @@ def test_call_mahjong_helper(input_str: str, river_tiles: list[Tile] = []) -> st
 
 
 import re
-from mahjong_ai.core.tile import Tile
+from mahjong_ai.table.tile import Tile
 
 def choose_best_discard_from_output(output_text: str) -> str:
     """
@@ -240,7 +240,7 @@ def choose_best_discard_from_output(output_text: str) -> str:
     return ""
 
 import re
-from mahjong_ai.core.tile import Tile
+from mahjong_ai.table.tile import Tile
 
 def choose_discard_by_points(output_text: str) -> str:
     """
@@ -330,7 +330,7 @@ def choose_discard_by_speed(output_text: str) -> str:
     return best_tile
 
 import re
-from mahjong_ai.core.tile import Tile
+from mahjong_ai.table.tile import Tile
 
 def choose_comprehensive_discard_from_output(output_text: str) -> str:
     """

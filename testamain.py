@@ -1,6 +1,6 @@
 from mahjong_ai.utils.helper_interface import test_call_mahjong_helper, mingpai_mahjong_helper, pon_mingpai_top_two_lines, chi_mingpai_top_two_lines
 from mahjong_ai.utils.helper_interface import choose_best_discard_from_output
-from mahjong_ai.core.tile import Tile
+from mahjong_ai.table.tile import Tile
 
 # 建立模擬手牌：123m 456p 789s 東南西
 hand_tiles = [

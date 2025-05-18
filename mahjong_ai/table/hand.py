@@ -1,6 +1,6 @@
 # mahjong_ai/core/hand.py
 
-from mahjong_ai.core.tile import Tile
+from mahjong_ai.table.tile import Tile
 
 class Hand:
     def __init__(self):
