@@ -14,28 +14,25 @@ if TYPE_CHECKING:
     from mahjong_ai.table.table import Table
 
 # === 玩家行為詢問介面 ===
-def ask_player_action(player: Player, action_type: str, tile: Tile, options: list = None) -> bool | list:
+def ask_player_action(table: Table, player: Player, action_type: str, tile: Tile, options: list = None) -> bool | list:
     """
     詢問玩家是否要執行某個行動。
     若 options 存在（如 Chi 有多組可吃），則應返回玩家選擇的組合。
     """
-    """"
-    if not hasattr(player, 'is_human') or not hasattr(player, 'strategy'):
-        return False
-    if player.is_human:
-        print(f"🟡 玩家 {player.player_id} 可選擇 {action_type} → 自動略過（尚未接 UI）")
-        return options[0] if options else False
-    else:
-        return player.strategy.should_call(action_type, tile, options)
-    """
+    if (action_type == "discard") :
+        return player.discard
     if (action_type == "pon") :
-        return player.pon(tile)
+        return player.pon(tile, table)
     if (action_type == "chi") :
-        return player.chi(tile)
+        return player.chi(tile, table)
     if (action_type == "daiminkan") :
-        return player.kan(tile)
-    
-    print(action_type)
+        return player.kan(tile, table, "daiminkan")
+    if (action_type == "ankan") :
+        return player.kan(tile, table, "ankan")
+    if (action_type == "kakan") :
+        return player.kan(tile, table, "kakan")
+    if(action_type == "liuju"):
+        return False
     if options == None:
         return True
     else:

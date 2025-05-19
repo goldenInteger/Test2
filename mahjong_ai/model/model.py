@@ -5,7 +5,7 @@ from torch.nn.utils.rnn import pack_padded_sequence, pad_sequence
 from typing import *
 from functools import partial
 from itertools import permutations
-from consts import obs_shape, oracle_obs_shape, ACTION_SPACE
+from mahjong_ai.model.consts import obs_shape, oracle_obs_shape, ACTION_SPACE
 
 class ChannelAttention(nn.Module):
     """

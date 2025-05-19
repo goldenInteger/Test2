@@ -66,7 +66,6 @@ class Table:
             return
         # TODO : 之後這裡要加出牌邏輯
         discard_tile: Tile
-        from mahjong_ai.utils.helper_interface import call_mahjong_helper, choose_best_discard_from_output, choose_discard_by_points
 
         # 立直
         if not player.is_riichi:
@@ -77,19 +76,9 @@ class Table:
                     riichi.declare_riichi(self, player, chosen_option)
                     discard_tile = chosen_option
                 else:
-                    output = call_mahjong_helper(player.hand.tiles, player.melds)
-                    best_str = choose_best_discard_from_output(output)
-                    try:
-                        discard_tile = Tile.from_helper_string(best_str)
-                    except:
-                        discard_tile = player.hand.tiles[0]   # 玩家選擇不立直，正常打牌，出牌邏輯補上
+                    discard_tile = player.discard(self)
             else:
-                output = call_mahjong_helper(player.hand.tiles, player.melds)   
-                best_str = choose_best_discard_from_output(output)
-                try:
-                    discard_tile = Tile.from_helper_string(best_str)
-                except:
-                    discard_tile = player.hand.tiles[0]   # 不可立直，出牌邏輯補上
+                discard_tile = player.discard(self)
         else:
             discard_tile = draw_tile   # 已立直，自動打摸牌
 
