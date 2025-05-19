@@ -10,6 +10,8 @@ from mahjong_ai.table.tile import Tile
 from mahjong_ai.table.wall import Wall
 from mahjong_ai.table.river import River
 from mahjong_ai.table.meld import Meld
+from mahjong_ai.utils.helper_interface import call_mahjong_helper, choose_best_discard_from_output, choose_discard_by_points
+from mahjong_ai.action import ai_decide_action
 from mahjong.agari import Agari
 
 if TYPE_CHECKING:
@@ -99,10 +101,6 @@ class Player:
         if tile:
             self.hand.add_tile(tile)
         return tile
-    
-    
-    
-    
 
     def discard_tile_from_hand(self, tile: Tile) -> bool:
         """
@@ -138,12 +136,6 @@ class Player:
         """
         self.melds.append(meld)
 
-    """def chupai(self, table: Table) -> Tile:
-        if self.is_ai:
-        else:
-    def mingpai(self, action_type: str, table: Table):
-        if self.is_ai:
-        else:"""
     def do_has_yaku(self) -> bool:
         """
         判斷手牌中是否存在三張相同的役牌（中、發、白、自風、場風）。
@@ -165,49 +157,146 @@ class Player:
         # 檢查是否有任一種牌數量達到 3 張
         return any(count >= 3 for count in counter.values())
     
+    def get_available_chi_types(self, tile: Tile) -> set[str]:
+        """
+        根據手牌與目標 tile，推斷可行的吃法種類
+        回傳值例：{"chi_low", "chi_mid"}
+        """
+        if tile.tile_type not in {"m", "p", "s"}:
+            return set()  # 字牌不能吃
 
-    def chi(self, tile: Tile) -> bool | list:
-        from mahjong_ai.utils.helper_interface import mingpai_mahjong_helper, chi_mingpai_top_two_lines
-        if (self.hasyaku or self.do_has_yaku()) :
-            text_output = mingpai_mahjong_helper(self.hand.tiles, self.melds, tile)
-            return chi_mingpai_top_two_lines(text_output, tile)
-        return False
+        val = tile.tile_value
+        suit = tile.tile_type
+        hand_ids = [t.to_34_id() for t in self.hand.tiles]
 
-    def kan(self, tile: Tile) -> bool:
-        return (self.hasyaku or self.do_has_yaku())
-
-    def pon(self, tile: Tile) -> bool:
-        from mahjong_ai.utils.helper_interface import mingpai_mahjong_helper, pon_mingpai_top_two_lines
-        if (self.hasyaku or self.do_has_yaku()) :
-            text_output = mingpai_mahjong_helper(self.hand.tiles, self.melds, tile)
-            return pon_mingpai_top_two_lines(text_output)
+        result = set()
         
-    # 至少要有兩張手牌一樣
-        if sum(1 for t in self.hand.tiles if t.is_same_tile(tile)) < 2:
+        # chi_low = tile 是第一張（如 3-4）
+        if 1 <= val <= 7:
+            tid1 = Tile(suit, val + 1).to_34_id()
+            tid2 = Tile(suit, val + 2).to_34_id()
+            if hand_ids.count(tid1) >= 1 and hand_ids.count(tid2) >= 1:
+                result.add("chi_low")
+
+        # chi_mid = tile 是中間張（如 2-4）
+        if 2 <= val <= 8:
+            tid1 = Tile(suit, val - 1).to_34_id()
+            tid2 = Tile(suit, val + 1).to_34_id()
+            if hand_ids.count(tid1) >= 1 and hand_ids.count(tid2) >= 1:
+                result.add("chi_mid")
+
+        # chi_high = tile 是最後張（如 2-3）
+        if 3 <= val <= 9:
+            tid1 = Tile(suit, val - 2).to_34_id()
+            tid2 = Tile(suit, val - 1).to_34_id()
+            if hand_ids.count(tid1) >= 1 and hand_ids.count(tid2) >= 1:
+                result.add("chi_high")
+
+        return result
+
+    def chi(self, tile: Tile, table: Table) -> bool | list:
+        if self.is_ai:
+            chi_types = self.get_available_chi_types(self, tile)
+            if not chi_types:
+                return False  # 沒得吃
+
+            # 傳入 AI 決策階段
+            action = ai_decide_action(table, buffer=[], action_types=chi_types)
+
+            chi_map = {
+                35: "low",
+                36: "mid",
+                37: "high",
+            }
+
+            if action not in chi_map:
+                return False
+
+            eat_type = chi_map[action]
+            val = tile.tile_value
+            suit = tile.tile_type
+
+            # 組吃牌順序（含 tile 本人）
+            if eat_type == "low":
+                tiles = [Tile(suit, val), Tile(suit, val + 1), Tile(suit, val + 2)]
+            elif eat_type == "mid":
+                tiles = [Tile(suit, val - 1), Tile(suit, val), Tile(suit, val + 1)]
+            elif eat_type == "high":
+                tiles = [Tile(suit, val - 2), Tile(suit, val - 1), Tile(suit, val)]
+            else:
+                return False
+
+            # 按照 tile 在中間排序
+            return tiles
+        else:
+            from mahjong_ai.utils.helper_interface import mingpai_mahjong_helper, chi_mingpai_top_two_lines
+            if (self.hasyaku or self.do_has_yaku()) :
+                text_output = mingpai_mahjong_helper(self.hand.tiles, self.melds, tile)
+                return chi_mingpai_top_two_lines(text_output, tile)
             return False
 
-        # 如果是字牌才檢查風牌限制
-        if tile.tile_type == 'honor':
-            # 東=1, 南=2, 西=3, 北=4, 白=5, 發=6, 中=7
-            valid_values = []
-
-            # 自風 & 場風（東=0, 南=1, 西=2, 北=3）
-            wind_map = {0: 1, 1: 2, 2: 3, 3: 4}
-            valid_values.append(wind_map.get(self.seat_wind))
-            valid_values.append(wind_map.get(self.round_wind))
-
-            # 中白發永遠可碰（5,6,7）
-            valid_values += [5, 6, 7]
-
-            if tile.tile_value not in valid_values:
+    def kan(self, tile: Tile, table: Table, action_type: str) -> bool:
+        if self.is_ai:
+            action = ai_decide_action(table, {action_type})
+            if action == 44:
                 return False
-          
-            self.hasyaku = True
+            else:
+                return True
+        elif action_type == "daiminkan":
+            return (self.hasyaku or self.do_has_yaku())
+        else:
+            return True
 
-        if ((self.hasyaku or self.do_has_yaku())) :
-            text_output = mingpai_mahjong_helper(self.hand.tiles, self.melds, tile)
-            return pon_mingpai_top_two_lines(text_output)
-        
-        return False
+    def pon(self, tile: Tile, table: Table) -> bool:
+        if self.is_ai:
+            action = ai_decide_action(table, {"pon"})
+            if action == 44:
+                return False
+            else:
+                return True
+        else:
+            from mahjong_ai.utils.helper_interface import mingpai_mahjong_helper, pon_mingpai_top_two_lines
+            if (self.hasyaku or self.do_has_yaku()) :
+                text_output = mingpai_mahjong_helper(self.hand.tiles, self.melds, tile)
+                return pon_mingpai_top_two_lines(text_output)
+            
+        # 至少要有兩張手牌一樣
+            if sum(1 for t in self.hand.tiles if t.is_same_tile(tile)) < 2:
+                return False
 
+            # 如果是字牌才檢查風牌限制
+            if tile.tile_type == 'honor':
+                # 東=1, 南=2, 西=3, 北=4, 白=5, 發=6, 中=7
+                valid_values = []
+
+                # 自風 & 場風（東=0, 南=1, 西=2, 北=3）
+                wind_map = {0: 1, 1: 2, 2: 3, 3: 4}
+                valid_values.append(wind_map.get(self.seat_wind))
+                valid_values.append(wind_map.get(self.round_wind))
+
+                # 中白發永遠可碰（5,6,7）
+                valid_values += [5, 6, 7]
+
+                if tile.tile_value not in valid_values:
+                    return False
+            
+                self.hasyaku = True
+
+            if ((self.hasyaku or self.do_has_yaku())) :
+                text_output = mingpai_mahjong_helper(self.hand.tiles, self.melds, tile)
+                return pon_mingpai_top_two_lines(text_output)
+            
+            return False
+    def discard(self, table: Table) -> Tile:
+        if self.is_ai:
+            action = ai_decide_action(table, {"discard"})
+            if action == 44:
+                return False
+            else:
+                return Tile.from_34_id(action)
+        else:
+            output = call_mahjong_helper(self.hand.tiles, self.melds)
+            best_str = choose_best_discard_from_output(output)
+            discard_tile = Tile.from_helper_string(best_str)
+            return discard_tile
 

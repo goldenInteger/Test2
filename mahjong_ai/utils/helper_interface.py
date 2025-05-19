@@ -4,7 +4,6 @@ import subprocess
 import json
 import os
 from collections import defaultdict, Counter
-from mahjong_ai.table.player import Player
 
 
 

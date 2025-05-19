@@ -10,9 +10,9 @@ brain = Brain(version=2, conv_channels=128, num_blocks=8).to(DEVICE).eval()
 dqn = DQN(version=2).to(DEVICE).eval()
 aux = AuxNet((4,)).to(DEVICE).eval()  # 若你推理階段不需要，可不用算
 
-def ai_decide_action(table, buffer: list[int]) -> int:
+def ai_decide_action(table, buffer: list[int], action_types: set[str]) -> int:
     # 1. 編碼 obs/mask
-    obs, mask = encode_obs_v2(table)
+    obs, mask = encode_obs_v2(table, action_types)
     obs_tensor = torch.tensor(obs).unsqueeze(0).float().to(DEVICE)   # [1, C, 34]
     mask_tensor = torch.tensor(mask).unsqueeze(0).bool().to(DEVICE)  # [1, A]
 
