@@ -49,7 +49,7 @@ def check_others_can_meld(table: Table, discarded_tile: Tile, from_player_id: in
         player = table.players[pid]
         # 榮和（搶先）
         if can_ron_13(table, player, discarded_tile):
-            if ask_player_action(player, "ron", discarded_tile):
+            if ask_player_action(table, player, "ron", discarded_tile):
 
                 player.hand.add_tile(discarded_tile)
 
@@ -81,12 +81,12 @@ def check_others_can_meld(table: Table, discarded_tile: Tile, from_player_id: in
         player = table.players[pid]
 
         if not player.is_riichi and can_daiminkan(player, discarded_tile):
-            if ask_player_action(player, "daiminkan", discarded_tile):
+            if ask_player_action(table, player, "daiminkan", discarded_tile):
                 make_daiminkan(table, player, discarded_tile, from_player_id)
                 return [(player.player_id, "daiminkan")]
 
         if not player.is_riichi and can_pon(player, discarded_tile):
-            if ask_player_action(player, "pon", discarded_tile):
+            if ask_player_action(table, player, "pon", discarded_tile):
                 make_pon(table, player, discarded_tile, from_player_id)
                 return [(player.player_id, "pon")]
 
@@ -95,8 +95,8 @@ def check_others_can_meld(table: Table, discarded_tile: Tile, from_player_id: in
     player = table.players[pid]
     chi_sets = can_chi_sets(player, discarded_tile)
     if not player.is_riichi and chi_sets:
-        if (ask_player_action(player, "chi", discarded_tile, chi_sets)):
-            chosen_set = ask_player_action(player, "chi", discarded_tile, chi_sets)
+        if (ask_player_action(table, player, "chi", discarded_tile, chi_sets)):
+            chosen_set = ask_player_action(table, player, "chi", discarded_tile, chi_sets)
             if chosen_set:
                 make_chi(table, player, discarded_tile, from_player_id, chosen_set)
                 return [(player.player_id, "chi")]
@@ -108,7 +108,7 @@ def try_chankan(table: Table, tile: Tile, from_player_id: int) -> bool:
         pid = (from_player_id + offset) % 4
         player = table.players[pid]
         if can_ron_13(table, player, tile):
-            if ask_player_action(player, "chankan", tile):
+            if ask_player_action(table, player, "chankan", tile):
                 player.hand.add_tile(tile)
                 table.winner = player
                 table.last_discard_player_id = from_player_id
