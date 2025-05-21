@@ -26,7 +26,7 @@ class Table:
     def run_game_loop(self):
         print(" 開始整場對局")
         main_player_id = random.randint(0, 3)
-        self.players[main_player_id].is_ai = True
+        # self.players[main_player_id].is_ai = True
         while not self.round.is_game_end():
             self.round.start_round(self)
             while not self.round_over:
@@ -42,7 +42,7 @@ class Table:
          # 九種九牌
         if self.turn < 4 and not self.is_mingpai:
             if Liuju.is_kyuushu_kyuuhai(player):
-                if Mingpai.ask_player_action(player, "liuju", None):
+                if Mingpai.ask_player_action(self, player, "liuju", None):
                     self.is_liuju = True
                     self.round_over = True
                     return
@@ -71,7 +71,7 @@ class Table:
         if not player.is_riichi:
             if riichi.can_declare_riichi(self, player):
                 riichi_options = riichi.get_riichi_discard_options(player)
-                chosen_option = Mingpai.ask_player_action(player, "riichi", None, riichi_options)
+                chosen_option = Mingpai.ask_player_action(self, player, "riichi", None, riichi_options)
                 if chosen_option:
                     riichi.declare_riichi(self, player, chosen_option)
                     discard_tile = chosen_option

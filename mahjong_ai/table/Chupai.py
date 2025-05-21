@@ -49,7 +49,7 @@ def draw_phase(table: Table, player: Player) -> Tile:
         return
     # 自摸
     if can_tsumo(player, tile):
-        if ask_player_action(player, "tsumo", tile):
+        if ask_player_action(table, player, "tsumo", tile):
             player.win_tile = tile
             table.winner = player
             player.is_tsumo = True
@@ -69,14 +69,14 @@ def draw_phase(table: Table, player: Player) -> Tile:
     # 暗槓
     ankan_tile = can_ankan(player)
     if ankan_tile != None:
-        if ask_player_action(player, "ankan", ankan_tile):
+        if ask_player_action(table, player, "ankan", ankan_tile):
             make_ankan(table, player, ankan_tile)
             table.skip_discard = True
             table.current_turn = player.player_id
             return
     # 加槓
     if can_kakan(player, tile):
-        if not player.is_riichi and ask_player_action(player, "kakan", tile):
+        if not player.is_riichi and ask_player_action(table, player, "kakan", tile):
             if try_chankan(table, tile, from_player_id=player.player_id):
                 return  # 搶槓成功 → 本人無法加槓
             make_kakan(table, player, tile)
