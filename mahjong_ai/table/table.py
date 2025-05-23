@@ -3,6 +3,7 @@ from mahjong_ai.table.player import Player
 from mahjong_ai.table.tile import Tile
 from mahjong_ai.table import Chupai, Mingpai, riichi, Hepai, Liuju
 from mahjong_ai.table.round import Round
+from mahjong_ai.buffer import ReplayBuffer
 import random
 # TODO: 出牌邏輯
 
@@ -22,11 +23,13 @@ class Table:
         self.rinshan_draw = False # 抽嶺上牌
         self.round_over = False # 遊戲是否結束
         self.round.start_round(self)
+        self.buffer = None
 
-    def run_game_loop(self):
+    def run_game_loop(self, buffer=None):
+        self.buffer = buffer
         print(" 開始整場對局")
         main_player_id = random.randint(0, 3)
-        # self.players[main_player_id].is_ai = True
+        self.players[main_player_id].is_ai = True
         while not self.round.is_game_end():
             self.round.start_round(self)
             while not self.round_over:
