@@ -201,7 +201,7 @@ class Player:
                 return False  # 沒得吃
 
             # 傳入 AI 決策階段
-            action = ai_decide_action(table, buffer=[], action_types=chi_types)
+            action = ai_decide_action(table, table.buffer, action_types=chi_types)
 
             chi_map = {
                 35: "low",
@@ -237,7 +237,7 @@ class Player:
 
     def kan(self, tile: Tile, table: Table, action_type: str) -> bool:
         if self.is_ai:
-            action = ai_decide_action(table, {action_type})
+            action = ai_decide_action(table, table.buffer, {action_type})
             if action == 44:
                 return False
             else:
@@ -249,7 +249,7 @@ class Player:
 
     def pon(self, tile: Tile, table: Table) -> bool:
         if self.is_ai:
-            action = ai_decide_action(table, {"pon"})
+            action = ai_decide_action(table, table.buffer, {"pon"})
             if action == 44:
                 return False
             else:
@@ -289,7 +289,7 @@ class Player:
             return False
     def discard(self, table: Table) -> Tile:
         if self.is_ai:
-            action = ai_decide_action(table, {"discard"})
+            action = ai_decide_action(table, table.buffer, {"discard"})
             if action == 44:
                 return False
             else:
