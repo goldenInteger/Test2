@@ -13,7 +13,8 @@ MAX_VERSION = 4
 # + 1 和牌
 # + 1 流局
 # + 1 PASS
-ACTION_SPACE = 34 + 1 + 3 + 1 + 1 + 1 + 1 + 1 + 1 + 1   # = 45
+# + 1 擴充
+ACTION_SPACE = 34 + 1 + 3 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1   # = 46
 
 GRP_SIZE = 7
 

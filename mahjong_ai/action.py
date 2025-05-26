@@ -22,7 +22,7 @@ def ai_decide_action(table, buffer, action_types: set[str]) -> int:
         action = torch.argmax(q, dim=-1).item()
 
         # 可選：預測 rank，只記錄不使用
-        pred_rank = torch.argmax(aux(phi), dim=-1).item()
+        # pred_rank = torch.argmax(aux(phi), dim=-1).item()
 
     reward =  44 #evaluate_action_reward(table, action)
 

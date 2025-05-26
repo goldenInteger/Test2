@@ -43,7 +43,7 @@ def encode_obs_v2(table: Table, action_types: set[str]) -> Tuple[np.ndarray, np.
     ROW_DORA = 330
     ROW_STATUS = 340
     ROW_WAITS = 900
-    ROW_SHANTEN = 940
+    ROW_SHANTEN = 930
 
     # === 1. 手牌 ===
     hand_34 = [0] * 34
@@ -148,6 +148,10 @@ def encode_obs_v2(table: Table, action_types: set[str]) -> Tuple[np.ndarray, np.
         mask[42] = True
     if legal_actions["ryukyoku"]:
         mask[43] = True
-    mask[44] = True
+    if legal_actions["discard"]:
+        mask[44] = False
+    else:
+        mask[44] = True
+    mask[45] = False
 
     return obs, mask

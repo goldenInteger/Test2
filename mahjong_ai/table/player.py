@@ -196,7 +196,7 @@ class Player:
 
     def chi(self, tile: Tile, table: Table) -> bool | list:
         if self.is_ai:
-            chi_types = self.get_available_chi_types(self, tile)
+            chi_types = self.get_available_chi_types(tile)
             if not chi_types:
                 return False  # 沒得吃
 
@@ -290,10 +290,7 @@ class Player:
     def discard(self, table: Table) -> Tile:
         if self.is_ai:
             action = ai_decide_action(table, table.buffer, {"discard"})
-            if action == 44:
-                return False
-            else:
-                return Tile.from_34_id(action)
+            return Tile.from_34_id(action)
         else:
             output = call_mahjong_helper(self.hand.tiles, self.melds)
             best_str = choose_best_discard_from_output(output)
