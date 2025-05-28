@@ -17,8 +17,6 @@ from mahjong.agari import Agari
 if TYPE_CHECKING:
     from mahjong_ai.table.table import Table  # 僅供型別檢查工具使用，不會在執行時引入
 
-if TYPE_CHECKING:
-    from mahjong_ai.table.table import Table  # 僅供型別檢查工具使用，不會在執行時引入
 
 class Player:
     def __init__(self, player_id: int):

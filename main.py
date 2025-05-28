@@ -3,6 +3,8 @@ from mahjong_ai.buffer import ReplayBuffer
 buffer = ReplayBuffer(capacity=50000)
 table = Table()
 table.run_game_loop(buffer)
+rewards = [item['reward'] for item in buffer.buffer if 'reward' in item]
+print("All rewards:", rewards)
 
 """def run_training_simulations(num_games: int):
     buffer = ReplayBuffer(capacity=50000)

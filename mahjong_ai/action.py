@@ -1,10 +1,15 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
 # ai/ai_decide.py
 import torch
-from mahjong_ai.table.player import Player
 from mahjong_ai.table.tile import Tile
 from mahjong_ai.model.model import Brain, DQN, AuxNet
 from mahjong_ai.table.encode_obs import encode_obs_v2
 # from ai.reward import evaluate_action_reward
+
+if TYPE_CHECKING:
+    from mahjong_ai.table.table import Table  # 僅供型別檢查工具使用，不會在執行時引入
+    from mahjong_ai.table.player import Player
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -44,7 +49,7 @@ from mahjong_ai.utils.helper_interface import (
     mingpai_mahjong_helper, chi_mingpai_top_two_lines, pon_mingpai_top_two_lines
 )
 
-def evaluate_action_reward(table, action: int, tile: Tile | None) -> float:
+def evaluate_action_reward(table: Table, action: int, tile: Tile | None) -> float:
     from mahjong_ai.table.Mingpai import can_chi_sets, can_pon, can_daiminkan
     player = table.players[table.current_turn]
  
