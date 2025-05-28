@@ -198,6 +198,33 @@ def call_mahjong_helper(hand_tiles: list[Tile], melds: list = None, river_tiles:
         print("[mahjong-helper] Unexpected error:", e)
         return ""
     
+import re
+from mahjong_ai.table.tile import Tile
+
+def choose_first_3_discards_from_output(output_text: str) -> list[str]:
+    """
+    從 mahjong-helper 的輸出中選出前三個出現的丟牌（"切X"），並轉為 helper string 格式。
+    """
+    lines = output_text.splitlines()
+    discards = []
+
+    for line in lines:
+        if "切" in line:
+            try:
+                match = re.search(r"切\s*(\S+)", line)
+                if match:
+                    tile_chinese = match.group(1)
+                    helper_str = Tile.from_chinese_string(tile_chinese).to_helper_string()
+                    if helper_str not in discards:
+                        discards.append(helper_str)
+                if len(discards) == 3:
+                    break
+            except Exception as e:
+                print("[choose_first_3_discards_from_output] 解析錯誤：", e, "in line:", line)
+                continue
+
+    return discards
+
 def test_call_mahjong_helper(input_str: str, river_tiles: list[Tile] = []) -> str:
 
     exe_path = r"C:\Mahjongmahjong-helper\mahjong-helper.exe"
