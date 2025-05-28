@@ -1,0 +1,38 @@
+[
+  {
+    "epoch": 10,
+    "avg_reward": -10600.0,
+    "win_rate": 0.0,
+    "avg_rank": 4.0
+  },
+  {
+    "epoch": 10,
+    "avg_reward": 4300.0,
+    "win_rate": 0.0,
+    "avg_rank": 4.0
+  },
+  {
+    "epoch": 10,
+    "avg_reward": 8500.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.0
+  },
+  {
+    "epoch": 10,
+    "avg_reward": 15100.0,
+    "win_rate": 0.0,
+    "avg_rank": 4.0
+  },
+  {
+    "epoch": 50,
+    "avg_reward": -9900.0,
+    "win_rate": 0.0,
+    "avg_rank": 4.0
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 19500.0,
+    "win_rate": 0.0,
+    "avg_rank": 4.0
+  }
+]

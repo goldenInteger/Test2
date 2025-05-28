@@ -5,6 +5,7 @@ import torch
 from mahjong_ai.table.tile import Tile
 from mahjong_ai.model.model import Brain, DQN, AuxNet
 from mahjong_ai.table.encode_obs import encode_obs_v2
+import os
 # from ai.reward import evaluate_action_reward
 
 if TYPE_CHECKING:
@@ -16,6 +17,17 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 brain = Brain(version=2, conv_channels=128, num_blocks=8).to(DEVICE).eval()
 dqn = DQN(version=2).to(DEVICE).eval()
 aux = AuxNet((4,)).to(DEVICE).eval()  # 若你推理階段不需要，可不用算
+model_path = "mahjong_ai/models"
+if os.path.exists(f"{model_path}/best_brain.pth"):
+    brain.load_state_dict(torch.load(f"{model_path}/best_brain.pth", map_location=DEVICE, weights_only=True))
+    dqn.load_state_dict(torch.load(f"{model_path}/best_dqn.pth", map_location=DEVICE, weights_only=True))
+    print(" 使用 best 模型")
+elif os.path.exists(f"{model_path}/latest_brain.pth"):
+    brain.load_state_dict(torch.load(f"{model_path}/latest_brain.pth", map_location=DEVICE, weights_only=True))
+    dqn.load_state_dict(torch.load(f"{model_path}/latest_dqn.pth", map_location=DEVICE, weights_only=True))
+    print(" 使用 latest 模型")
+else:
+    print("[!] 沒有找到任何模型，請先執行訓練 train.py")
 
 def ai_decide_action(table, tile , buffer, action_types: set[str]) -> int:
     # 1. 編碼 obs/mask
@@ -29,19 +41,20 @@ def ai_decide_action(table, tile , buffer, action_types: set[str]) -> int:
         action = torch.argmax(q, dim=-1).item()
 
         # 可選：預測 rank，只記錄不使用
-        pred_rank = torch.argmax(aux(phi), dim=-1).item()
+        # pred_rank = torch.argmax(aux(phi), dim=-1).item()
 
     reward =  evaluate_action_reward(table, action, tile)
 
-    buffer.push({
-        "obs": obs.tolist(),       # [942, 34] → list of list
-        "mask": mask.tolist(),     # [46] → list
-        "action": int(action),     # 確保不是 np.int64
-        "reward": float(reward),   # 確保不是 np.float32
-    })
+    if buffer is not None:
+        buffer.push({
+            "obs": obs.tolist(),       # [942, 34] → list of list
+            "mask": mask.tolist(),     # [46] → list
+            "action": int(action),     # 確保不是 np.int64
+            "reward": float(reward),   # 確保不是 np.float32
+        })
 
 
-    return action
+        return action
 
 
 from mahjong_ai.utils.helper_interface import (
@@ -55,11 +68,10 @@ def evaluate_action_reward(table: Table, action: int, tile: Tile | None) -> floa
  
     # 打牌 (0~33)
     if 0 <= action <= 33:
-        if not tile:
-            return -1.0  # 沒傳 tile 是錯誤用法
+        discard_tile = Tile.from_34_id(action)
         output = call_mahjong_helper(player.hand.tiles, player.melds)
         top_discards = choose_first_3_discards_from_output(output)
-        if tile.to_helper_string() in top_discards:
+        if discard_tile.to_helper_string() in top_discards:
             return 1.0
         else:
             return -0.2

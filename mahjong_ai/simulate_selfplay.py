@@ -24,7 +24,7 @@ def simulate_selfplay(output_path):
 def parse_args():
     parser = argparse.ArgumentParser()
     now = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    parser.add_argument("--output", type=str, default=f"data/selfplay_round_{now}.json",help="輸出訓練資料的檔案路徑")
+    parser.add_argument("--output", type=str, default=f"mahjong_ai/data/selfplay_round_{now}.json",help="輸出訓練資料的檔案路徑")
     return parser.parse_args()
 
 if __name__ == "__main__":

@@ -37,6 +37,8 @@ class Table:
             self.round.handle_round_end(self)
         print("\n==== 遊戲結束 ====")
         for p in range(4):
+            if self.players[p].is_ai:
+                print(f"\n{p}isAI")
             print(f"\n{p} : {self.players[p].points}")
 
     def step(self):

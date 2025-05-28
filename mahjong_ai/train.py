@@ -8,12 +8,14 @@ from mahjong_ai.model.model import Brain, DQN
 import os
 import argparse
 import subprocess
+import sys
+
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # 訓練過程中 loss/reward 儲存路徑
-LOSS_LOG_PATH = "models/loss_log.json"
-REWARD_LOG_PATH = "models/reward_log.json"
+LOSS_LOG_PATH = "mahjong_ai/models/loss_log.json"
+REWARD_LOG_PATH = "mahjong_ai/models/reward_log.json"
 
 # 資料集定義：將 JSON 中每筆 obs/mask/action/reward 轉為 tensor
 class MahjongDataset(Dataset):
@@ -39,30 +41,56 @@ def load_dataset(json_path):
 
 # 呼叫 test_play.py，取得 avg_reward 結果與細節
 def evaluate_model():
-    print("\n[✓] 執行模型評估：test_play.py")
-    result = subprocess.run(["python", "test_play.py"], capture_output=True, text=True)
+    print("\n[OK] 執行模型評估：test_play.py")
+    cwd = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    env = os.environ.copy()
+    env["PYTHONIOENCODING"] = "utf-8"
+    result = subprocess.run([sys.executable, "-m", "mahjong_ai.test_play"], capture_output=True, text=True, env=env, cwd=cwd, errors="ignore")
+
+    print("[Debug] returncode:", result.returncode)
     if result.returncode != 0:
         print("[!] test_play 失敗：", result.stderr)
         return None
-    with open("models/test_result.json", "r", encoding="utf-8") as f:
-        result_data = json.load(f)
-    return result_data.get("avg_reward", -9999), result_data
+
+    try:
+        with open("mahjong_ai/models/test_result.json", "r", encoding="utf-8") as f:
+            result_data = json.load(f)
+        print("[Debug] result_data =", result_data)
+
+        if not isinstance(result_data, dict):
+            print("[!] 讀到的 JSON 不是 dict，而是：", type(result_data))
+            return None
+
+        if "avg_reward" not in result_data:
+            print("[!] 缺少 avg_reward 欄位")
+            return None
+
+        avg_reward = result_data["avg_reward"]
+        if not isinstance(avg_reward, (int, float)):
+            print("[!] avg_reward 欄位格式錯誤：", avg_reward)
+            return None
+
+        return avg_reward, result_data
+
+    except Exception as e:
+        print("[!] 無法讀取測試結果檔案：", e)
+        return None
 
 # 嘗試讀取目前最好的 reward
 def load_best_reward():
     try:
-        with open("models/best_reward.txt", "r") as f:
+        with open("mahjong_ai/models/best_reward.txt", "r") as f:
             return float(f.read().strip())
     except:
         return -9999
 
 # 如果 reward 比歷史最佳還好，就更新 best 模型與分數
 def save_best_model(brain, dqn, reward):
-    torch.save(brain.state_dict(), "models/best_brain.pth")
-    torch.save(dqn.state_dict(), "models/best_dqn.pth")
-    with open("models/best_reward.txt", "w") as f:
+    torch.save(brain.state_dict(), "mahjong_ai/models/best_brain.pth")
+    torch.save(dqn.state_dict(), "mahjong_ai/models/best_dqn.pth")
+    with open("mahjong_ai/models/best_reward.txt", "w") as f:
         f.write(str(reward))
-    print(f"[✓] 發現更好的模型，已儲存 best_brain.pth 與 best_dqn.pth (reward={reward:.4f})")
+    print(f" 發現更好的模型，已儲存 best_brain.pth 與 best_dqn.pth (reward={reward:.4f})")
 
 # 附加訓練紀錄（loss/reward）進 JSON 紀錄檔
 def append_json_log(path, record):
@@ -74,6 +102,12 @@ def append_json_log(path, record):
     logs.append(record)
     with open(path, 'w', encoding='utf-8') as f:
         json.dump(logs, f, ensure_ascii=False, indent=2)
+
+def compute_total_reward(json_path):
+    with open(json_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    total_reward = sum(sample["reward"] for sample in data)
+    return total_reward
 
 # ====== 主訓練函數，包含模型初始化、訓練迴圈、測試與儲存 ======
 def train(config):
@@ -112,10 +146,10 @@ def train(config):
         append_json_log(LOSS_LOG_PATH, {"epoch": epoch + 1, "loss": avg_loss})
 
     # 儲存最新模型
-    os.makedirs("models", exist_ok=True)
-    torch.save(brain.state_dict(), "models/latest_brain.pth")
-    torch.save(dqn.state_dict(), "models/latest_dqn.pth")
-    torch.save(brain.state_dict(), "models/latest.pth")
+    os.makedirs("mahjong_ai/models", exist_ok=True)
+    torch.save(brain.state_dict(), "mahjong_ai/models/latest_brain.pth")
+    torch.save(dqn.state_dict(), "mahjong_ai/models/latest_dqn.pth")
+    torch.save(brain.state_dict(), "mahjong_ai/models/latest.pth")
 
     # 評估新模型表現
     eval_reward, full_result = evaluate_model()
@@ -125,7 +159,16 @@ def train(config):
         if eval_reward > best_reward:
             save_best_model(brain, dqn, eval_reward)
         else:
-            print(f"[✓] 模型未進步，維持最佳 reward={best_reward:.4f}")
+            print(f" 模型未進步，維持最佳 reward={best_reward:.4f}")
+
+    # === 加總這次所有 reward 並存檔 ===
+    total_reward = compute_total_reward(config.json_path)
+    print(f" 本次模擬 reward 總和：{total_reward:.2f}")
+
+    append_json_log("mahjong_ai/models/reward_sum_log.json", {
+        "epoch": config.epochs,
+        "total_reward": total_reward
+    })
 
 # ====== 命令列引數解析：支援多參數調整 ======
 if __name__ == "__main__":

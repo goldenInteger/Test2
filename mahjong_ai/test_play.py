@@ -4,8 +4,8 @@ import json
 from mahjong_ai.table.table import Table
 from mahjong_ai.buffer import ReplayBuffer
 
-NUM_TEST_GAMES = 20
-OUTPUT_PATH = "models/test_result.json"
+NUM_TEST_GAMES = 10
+OUTPUT_PATH = "mahjong_ai/models/test_result.json"
 
 
 def evaluate_model(num_games=NUM_TEST_GAMES):
@@ -15,8 +15,8 @@ def evaluate_model(num_games=NUM_TEST_GAMES):
 
     for i in range(num_games):
         table = Table()
-        table.buffer = ReplayBuffer(capacity=1)  # 不紀錄資料，只跑模型
-        table.run_game_loop()
+        buffer = ReplayBuffer(capacity=1)  # 不紀錄資料，只跑模型
+        table.run_game_loop(buffer)
 
         ai_player = next(p for p in table.players if p.is_ai)
         total_reward += ai_player.points
@@ -41,7 +41,7 @@ def evaluate_model(num_games=NUM_TEST_GAMES):
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
 
-    print(f"✓ 測試完成：{num_games} 局結果寫入 {OUTPUT_PATH}")
+    print(f" 測試完成：{num_games} 局結果寫入 {OUTPUT_PATH}")
     print(result)
 
 
