@@ -21,7 +21,7 @@ model_path = "mahjong_ai/models"
 if os.path.exists(f"{model_path}/best_brain.pth"):
     brain.load_state_dict(torch.load(f"{model_path}/best_brain.pth", map_location=DEVICE, weights_only=True))
     dqn.load_state_dict(torch.load(f"{model_path}/best_dqn.pth", map_location=DEVICE, weights_only=True))
-    print(" 使用 best 模型")
+    print("[!] 使用 best 模型")
 elif os.path.exists(f"{model_path}/latest_brain.pth"):
     brain.load_state_dict(torch.load(f"{model_path}/latest_brain.pth", map_location=DEVICE, weights_only=True))
     dqn.load_state_dict(torch.load(f"{model_path}/latest_dqn.pth", map_location=DEVICE, weights_only=True))

@@ -34,5 +34,47 @@
     "avg_reward": 19500.0,
     "win_rate": 0.0,
     "avg_rank": 4.0
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 13960.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.4
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 12800.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.0
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 400.0,
+    "win_rate": 0.0,
+    "avg_rank": 4.0
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 12500.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.4
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 19820.0,
+    "win_rate": 0.2,
+    "avg_rank": 3.0
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 5500.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.6
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 19260.0,
+    "win_rate": 0.4,
+    "avg_rank": 2.4
   }
 ]

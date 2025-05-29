@@ -6,7 +6,7 @@ import datetime
 from mahjong_ai.buffer import ReplayBuffer
 from mahjong_ai.table.table import Table
 
-NUM_GAMES = 100  # 對局數
+NUM_GAMES = 20  # 對局數
 
 # 主模擬函數：跑多場對局並儲存訓練資料至指定路徑
 def simulate_selfplay(output_path):

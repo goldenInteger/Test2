@@ -23,8 +23,7 @@ subprocess.run([
     sys.executable, "-m", "mahjong_ai.train",
     "--json_path", json_path,
     "--batch_size", "256",
-    "--epochs", "50"
-    "",
+    "--epochs", "50",
     "--lr", "0.0001",
     "--conv_channels", "128",
     "--num_blocks", "8",

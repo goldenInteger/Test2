@@ -34,5 +34,33 @@
   {
     "epoch": 50,
     "total_reward": 13.30000000000001
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1049.7999999999793
+  },
+  {
+    "epoch": 50,
+    "total_reward": 43.39999999999998
+  },
+  {
+    "epoch": 50,
+    "total_reward": 64.29999999999994
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1171.1999999999787
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1171.4999999999854
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1326.1999999999837
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1380.7999999999836
   }
 ]

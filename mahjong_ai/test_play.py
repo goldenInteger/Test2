@@ -4,7 +4,7 @@ import json
 from mahjong_ai.table.table import Table
 from mahjong_ai.buffer import ReplayBuffer
 
-NUM_TEST_GAMES = 10
+NUM_TEST_GAMES = 5
 OUTPUT_PATH = "mahjong_ai/models/test_result.json"
 
 

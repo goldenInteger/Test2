@@ -118,6 +118,15 @@ def train(config):
     # 初始化模型（Brain 決定 obs 特徵、DQN 決定 Q 值）
     brain = Brain(version=config.version, conv_channels=config.conv_channels, num_blocks=config.num_blocks).to(DEVICE)
     dqn = DQN(version=config.version).to(DEVICE)
+    # 接續最佳模型訓練
+    best_brain_path = "mahjong_ai/models/best_brain.pth"
+    best_dqn_path = "mahjong_ai/models/best_dqn.pth"
+    if os.path.exists(best_brain_path) and os.path.exists(best_dqn_path):
+        print("載入最佳模型進行續訓...")
+        brain.load_state_dict(torch.load(best_brain_path, map_location=DEVICE, weights_only=True))
+        dqn.load_state_dict(torch.load(best_dqn_path, map_location=DEVICE, weights_only=True))
+    else:
+        print("找不到最佳模型，從頭開始訓練")
 
     # 建立 optimizer
     optimizer = torch.optim.Adam(list(brain.parameters()) + list(dqn.parameters()), lr=config.lr, weight_decay=config.weight_decay)
