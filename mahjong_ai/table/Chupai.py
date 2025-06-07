@@ -40,6 +40,7 @@ def draw_phase(table: Table, player: Player) -> Tile:
     else:
         # 摸牌
         tile = player.draw_tile_from_wall(table.wall)
+        table.remaining = table.wall.remaining_count()
         print(f"玩家 {player.player_id} 摸牌：{tile}")
     # 流局
     if tile is None:

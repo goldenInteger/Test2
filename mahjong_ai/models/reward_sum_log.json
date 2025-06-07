@@ -62,5 +62,301 @@
   {
     "epoch": 50,
     "total_reward": 1380.7999999999836
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1392.5999999999835
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1321.9999999999845
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1391.7999999999845
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1457.3999999999876
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1429.799999999989
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1460.7999999999906
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1306.9999999999905
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1657.3999999999853
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1498.5999999999906
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1372.7999999999886
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1379.7999999999897
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1477.9999999999873
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1519.7999999999909
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1441.19999999999
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1769.9999999999884
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1613.9999999999882
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1553.5999999999883
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1428.1999999999896
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1445.799999999991
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1422.599999999989
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1151.5999999999929
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1597.799999999989
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1362.5999999999906
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1502.1999999999907
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1627.3999999999887
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1496.5999999999906
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1594.7999999999906
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1419.3999999999917
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1696.199999999989
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1523.5999999999908
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1641.5999999999901
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1422.5999999999915
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1359.9999999999925
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1433.5999999999935
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1517.1999999999919
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1451.1999999999925
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1531.1999999999905
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1459.3999999999921
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1565.1999999999905
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1514.5999999999913
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1535.399999999991
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1684.3999999999878
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1292.9999999999927
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1376.999999999993
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1495.1999999999907
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1521.599999999991
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1371.199999999992
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1558.39999999999
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1518.799999999991
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1562.3999999999908
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1590.59999999999
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1439.7999999999927
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1607.799999999989
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1324.1999999999928
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1541.9999999999898
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1492.3999999999912
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1549.5999999999901
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1427.3999999999912
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1315.3999999999933
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1695.7999999999897
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1495.999999999992
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1493.7999999999915
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1506.1999999999932
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1722.9999999999902
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1500.3999999999912
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1403.999999999993
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1409.9999999999916
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1846.9999999999916
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1460.799999999994
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1418.7999999999925
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1561.9999999999925
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1540.1999999999928
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1627.5999999999917
+  },
+  {
+    "epoch": 50,
+    "total_reward": 1373.5999999999938
   }
 ]

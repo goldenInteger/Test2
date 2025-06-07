@@ -76,5 +76,507 @@
     "avg_reward": 19260.0,
     "win_rate": 0.4,
     "avg_rank": 2.4
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 15940.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.2
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 10260.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.8
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 20220.0,
+    "win_rate": 0.4,
+    "avg_rank": 2.4
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 14660.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.2
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 22340.0,
+    "win_rate": 0.2,
+    "avg_rank": 2.8
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 9560.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.4
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 21860.0,
+    "win_rate": 0.2,
+    "avg_rank": 3.0
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 22060.0,
+    "win_rate": 0.2,
+    "avg_rank": 2.8
+  },
+  {
+    "epoch": 50,
+    "avg_reward": -3340.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.4
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 13800.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.2
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 12360.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.2
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 23300.0,
+    "win_rate": 0.2,
+    "avg_rank": 2.4
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 15720.0,
+    "win_rate": 0.2,
+    "avg_rank": 3.4
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 16100.0,
+    "win_rate": 0.2,
+    "avg_rank": 3.4
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 21100.0,
+    "win_rate": 0.2,
+    "avg_rank": 2.6
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 19560.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.0
+  },
+  {
+    "epoch": 50,
+    "total_reward": 2.6,
+    "avg_point": 28820.0,
+    "win_rate": 0.2,
+    "avg_rank": 2.4
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 61.92,
+    "avg_point": 30660.0,
+    "win_rate": 0.6,
+    "avg_rank": 2.2
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 72.92,
+    "avg_point": 22060.0,
+    "win_rate": 0.2,
+    "avg_rank": 2.8
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 62.64,
+    "avg_point": 33220.0,
+    "win_rate": 0.4,
+    "avg_rank": 2.0
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 68.32,
+    "avg_point": 17860.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.0
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 75.24,
+    "avg_point": 28260.0,
+    "win_rate": 0.4,
+    "avg_rank": 2.0
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 70.48,
+    "avg_point": 19440.0,
+    "win_rate": 0.4,
+    "avg_rank": 2.6
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.74,
+    "avg_point": 23680.0,
+    "win_rate": 0.2,
+    "avg_rank": 2.6
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.76,
+    "avg_point": 9180.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.8
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.78,
+    "avg_point": 20360.0,
+    "win_rate": 0.2,
+    "avg_rank": 2.4
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.75,
+    "avg_point": 13880.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.2
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.79,
+    "avg_point": 18600.0,
+    "win_rate": 0.2,
+    "avg_rank": 3.2
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.77,
+    "avg_point": 21620.0,
+    "win_rate": 0.0,
+    "avg_rank": 2.6
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.78,
+    "avg_point": 24840.0,
+    "win_rate": 0.4,
+    "avg_rank": 2.2
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.84,
+    "avg_point": 19840.0,
+    "win_rate": 0.4,
+    "avg_rank": 2.8
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.77,
+    "avg_point": 22380.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.0
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.8,
+    "avg_point": 17820.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.0
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.81,
+    "avg_point": 29240.0,
+    "win_rate": 0.4,
+    "avg_rank": 2.0
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.79,
+    "avg_point": 30660.0,
+    "win_rate": 0.2,
+    "avg_rank": 2.4
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.79,
+    "avg_point": 12500.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.2
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.82,
+    "avg_point": 22060.0,
+    "win_rate": 0.0,
+    "avg_rank": 2.6
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.84,
+    "avg_point": 17160.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.6
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.78,
+    "avg_point": 7140.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.6
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.83,
+    "avg_point": 19280.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.0
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.79,
+    "avg_point": 31820.0,
+    "win_rate": 0.4,
+    "avg_rank": 1.8
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.74,
+    "avg_point": 3740.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.6
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.74,
+    "avg_point": 12720.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.8
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.78,
+    "avg_point": 3880.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.4
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.8,
+    "avg_point": 23420.0,
+    "win_rate": 0.2,
+    "avg_rank": 3.0
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.8,
+    "avg_point": 9940.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.4
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.8,
+    "avg_point": 19500.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.2
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.79,
+    "avg_point": 19480.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.0
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.79,
+    "avg_point": 27600.0,
+    "win_rate": 0.2,
+    "avg_rank": 2.4
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.8,
+    "avg_point": 11540.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.4
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.8,
+    "avg_point": 23420.0,
+    "win_rate": 0.2,
+    "avg_rank": 2.2
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.8,
+    "avg_point": 24800.0,
+    "win_rate": 0.2,
+    "avg_rank": 2.4
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.81,
+    "avg_point": 29080.0,
+    "win_rate": 0.4,
+    "avg_rank": 2.4
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.81,
+    "avg_point": 16160.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.2
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.8,
+    "avg_point": 26880.0,
+    "win_rate": 0.2,
+    "avg_rank": 2.4
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.81,
+    "avg_point": 17280.0,
+    "win_rate": 0.2,
+    "avg_rank": 2.8
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.8,
+    "avg_point": 12820.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.2
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.78,
+    "avg_point": 10400.0,
+    "win_rate": 0.2,
+    "avg_rank": 2.6
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.81,
+    "avg_point": 12620.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.2
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.77,
+    "avg_point": 260.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.4
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.79,
+    "avg_point": 14280.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.0
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.79,
+    "avg_point": 20600.0,
+    "win_rate": 0.2,
+    "avg_rank": 2.6
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.85,
+    "avg_point": 24900.0,
+    "win_rate": 0.4,
+    "avg_rank": 2.4
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.83,
+    "avg_point": 18640.0,
+    "win_rate": 0.2,
+    "avg_rank": 2.8
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.8,
+    "avg_point": 18760.0,
+    "win_rate": 0.2,
+    "avg_rank": 3.0
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.85,
+    "avg_point": 24680.0,
+    "win_rate": 0.2,
+    "avg_rank": 2.2
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.82,
+    "avg_point": 28860.0,
+    "win_rate": 0.4,
+    "avg_rank": 2.4
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.82,
+    "avg_point": 19100.0,
+    "win_rate": 0.0,
+    "avg_rank": 2.8
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.82,
+    "avg_point": 21360.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.0
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.86,
+    "avg_point": 6840.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.6
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.81,
+    "avg_point": 7160.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.4
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.86,
+    "avg_point": 31440.0,
+    "win_rate": 0.6,
+    "avg_rank": 1.8
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.85,
+    "avg_point": 26440.0,
+    "win_rate": 0.0,
+    "avg_rank": 2.4
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.83,
+    "avg_point": 8880.0,
+    "win_rate": 0.0,
+    "avg_rank": 3.2
   }
 ]

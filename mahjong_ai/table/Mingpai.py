@@ -27,8 +27,8 @@ def ask_player_action(table: Table, player: Player, action_type: str, tile: Tile
         return player.chi(tile, table)
     if (action_type == "daiminkan") :
         return player.kan(tile, table, "daiminkan")
-    if (action_type == "ankan") :
-        return player.kan(tile, table, "ankan")
+    """if (action_type == "ankan") :
+        return player.kan(tile, table, "ankan")"""
     if (action_type == "kakan") :
         return player.kan(tile, table, "kakan")
     if(action_type == "liuju"):

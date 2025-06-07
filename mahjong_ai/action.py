@@ -53,8 +53,7 @@ def ai_decide_action(table, tile , buffer, action_types: set[str]) -> int:
             "reward": float(reward),   # 確保不是 np.float32
         })
 
-
-        return action
+    return action
 
 
 from mahjong_ai.utils.helper_interface import (
@@ -65,7 +64,7 @@ from mahjong_ai.utils.helper_interface import (
 def evaluate_action_reward(table: Table, action: int, tile: Tile | None) -> float:
     from mahjong_ai.table.Mingpai import can_chi_sets, can_pon, can_daiminkan
     player = table.players[table.current_turn]
- 
+    print(f"\n{action}")
     # 打牌 (0~33)
     if 0 <= action <= 33:
         discard_tile = Tile.from_34_id(action)

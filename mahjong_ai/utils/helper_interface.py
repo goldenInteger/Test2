@@ -68,7 +68,7 @@ def mingpai_mahjong_helper(hand_tiles: list[Tile], melds: list = None, drawn_til
             drawn_str = '0' + drawn_str[-1]
         input_str += f" + {drawn_str}"
 
-    print(input_str)
+    # print(input_str)
     exe_path = r"C:\Mahjong\mahjong-helper\mahjong-helper.exe"
 
     try:
@@ -79,7 +79,7 @@ def mingpai_mahjong_helper(hand_tiles: list[Tile], melds: list = None, drawn_til
             check=True,
             encoding='utf-8'
         )
-        print("[mahjong-helper] stdout:", result.stdout)
+        # print("[mahjong-helper] stdout:", result.stdout)
         return result.stdout
     except subprocess.CalledProcessError as e:
         print("[mahjong-helper] Error:", e.stderr)
@@ -148,7 +148,7 @@ def chi_mingpai_top_two_lines(output_text: str, tile: Tile) -> bool | list:
         print("[compare_mingpai_top_two_lines] 資料不足")
         return False
 
-    print("找到的前兩行開頭數字:", numbers[0], numbers[1])
+    # print("找到的前兩行開頭數字:", numbers[0], numbers[1])
 
     if numbers[1] > numbers[0]:
         chi_match = re.search(r"((\d{2,3})[万饼索mps])吃", matched_lines[1])
@@ -178,7 +178,7 @@ from mahjong_ai.table.tile import Tile
 
 def call_mahjong_helper(hand_tiles: list[Tile], melds: list = None, river_tiles: list[Tile] = []) -> str:
     input_str = format_tiles_for_helper(hand_tiles, melds)
-    print(input_str)
+    # print(input_str)
     exe_path = r"C:\Mahjong\mahjong-helper\mahjong-helper.exe"
 
     try:
@@ -189,7 +189,7 @@ def call_mahjong_helper(hand_tiles: list[Tile], melds: list = None, river_tiles:
             check=True,
             encoding='utf-8'
         )
-        print("[mahjong-helper] stdout:", result.stdout)
+        # print("[mahjong-helper] stdout:", result.stdout)
         return result.stdout
     except subprocess.CalledProcessError as e:
         print("[mahjong-helper] Error:", e.stderr)
@@ -237,7 +237,7 @@ def test_call_mahjong_helper(input_str: str, river_tiles: list[Tile] = []) -> st
             check=True,
             encoding='utf-8'
         )
-        print("[mahjong-helper] stdout:", result.stdout)
+        #　print("[mahjong-helper] stdout:", result.stdout)
         return result.stdout  # ✅ 回傳純 str
     except subprocess.CalledProcessError as e:
         print("[mahjong-helper] Error:", e.stderr)

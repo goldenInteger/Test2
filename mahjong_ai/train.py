@@ -45,7 +45,7 @@ def evaluate_model():
     cwd = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     env = os.environ.copy()
     env["PYTHONIOENCODING"] = "utf-8"
-    result = subprocess.run([sys.executable, "-m", "mahjong_ai.test_play"], capture_output=True, text=True, env=env, cwd=cwd, errors="ignore")
+    result = subprocess.run([sys.executable, "-m", "mahjong_ai.test_play"], text=True, env=env, cwd=cwd, errors="ignore")
 
     print("[Debug] returncode:", result.returncode)
     if result.returncode != 0:
@@ -61,16 +61,17 @@ def evaluate_model():
             print("[!] 讀到的 JSON 不是 dict，而是：", type(result_data))
             return None
 
-        if "avg_reward" not in result_data:
-            print("[!] 缺少 avg_reward 欄位")
+        if "avg_point" not in result_data:
+            print("[!] 缺少 avg_point 欄位")
             return None
 
+        avg_point = result_data["avg_point"]
         avg_reward = result_data["avg_reward"]
-        if not isinstance(avg_reward, (int, float)):
-            print("[!] avg_reward 欄位格式錯誤：", avg_reward)
+        if not isinstance(avg_point, (int, float)):
+            print("[!] avg_reward 欄位格式錯誤：", avg_point)
             return None
 
-        return avg_reward, result_data
+        return avg_reward, avg_point, result_data
 
     except Exception as e:
         print("[!] 無法讀取測試結果檔案：", e)
@@ -108,6 +109,13 @@ def compute_total_reward(json_path):
         data = json.load(f)
     total_reward = sum(sample["reward"] for sample in data)
     return total_reward
+
+def compute_avg_reward(json_path):
+    with open(json_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    total = sum(sample["reward"] for sample in data)
+    count = len(data)
+    return total / count if count > 0 else -9999
 
 # ====== 主訓練函數，包含模型初始化、訓練迴圈、測試與儲存 ======
 def train(config):
@@ -161,10 +169,11 @@ def train(config):
     torch.save(brain.state_dict(), "mahjong_ai/models/latest.pth")
 
     # 評估新模型表現
-    eval_reward, full_result = evaluate_model()
+    eval_reward, eval_point, full_result = evaluate_model()
     if eval_reward is not None:
         append_json_log(REWARD_LOG_PATH, {"epoch": config.epochs, **full_result})
-        best_reward = load_best_reward()
+        best_reward = compute_avg_reward(config.json_path)
+        print(f" 模擬best_avg_reward：{best_reward:.2f}")
         if eval_reward > best_reward:
             save_best_model(brain, dqn, eval_reward)
         else:

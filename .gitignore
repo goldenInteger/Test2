@@ -5,3 +5,6 @@ __pycache__/
 # Virtual environment
 venv/
 .env/
+
+# 忽略所有 .json 檔案
+*.json

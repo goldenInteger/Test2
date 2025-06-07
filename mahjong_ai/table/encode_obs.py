@@ -96,7 +96,7 @@ def encode_obs_v2(table: Table, action_types: set[str]) -> Tuple[np.ndarray, np.
 
     obs[ROW_SITUATION][0] = table.round.honba / 10.0
     obs[ROW_SITUATION + 1][0] = table.round.kyotaku / 10.0
-    obs[ROW_SITUATION + 2][0] = table.wall.remaining_count() / 70.0
+    obs[ROW_SITUATION + 2][0] = table.remaining / 70.0
 
     # === 7. 寶牌 ===
     for i, tile in enumerate(table.wall.open_dora_wall[:5]):
@@ -126,6 +126,7 @@ def encode_obs_v2(table: Table, action_types: set[str]) -> Tuple[np.ndarray, np.
         "ryukyoku": "ryukyoku" in action_types,
     }
 
+    mask[:] = False
     for tid in legal_actions.get("discard", []):
         mask[tid] = True
     if legal_actions["riichi"]:
@@ -148,10 +149,8 @@ def encode_obs_v2(table: Table, action_types: set[str]) -> Tuple[np.ndarray, np.
         mask[42] = True
     if legal_actions["ryukyoku"]:
         mask[43] = True
-    if legal_actions["discard"]:
-        mask[44] = False
-    else:
-        mask[44] = True
+    can_discard = len(legal_actions["discard"]) > 0
+    mask[44] = not can_discard  # 正確方式：無牌可丟 → 允許 PASS，否則禁止
     mask[45] = False
 
     return obs, mask

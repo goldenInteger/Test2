@@ -4,7 +4,9 @@ buffer = ReplayBuffer(capacity=50000)
 table = Table()
 table.run_game_loop(buffer)
 rewards = [item['reward'] for item in buffer.buffer if 'reward' in item]
+avg = sum(rewards) / len(rewards)
 print("All rewards:", rewards)
+print("\nAVG:", avg)
 
 """def run_training_simulations(num_games: int):
     buffer = ReplayBuffer(capacity=50000)

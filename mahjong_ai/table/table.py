@@ -24,6 +24,7 @@ class Table:
         self.round_over = False # 遊戲是否結束
         self.round.start_round(self)
         self.buffer = None
+        self.remaining = self.wall.remaining_count()
 
     def run_game_loop(self, buffer=None):
         self.buffer = buffer

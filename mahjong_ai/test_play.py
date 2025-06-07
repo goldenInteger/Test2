@@ -9,17 +9,22 @@ OUTPUT_PATH = "mahjong_ai/models/test_result.json"
 
 
 def evaluate_model(num_games=NUM_TEST_GAMES):
+    total_point = 0
     total_reward = 0
     total_win = 0
     total_rank_sum = 0
+    total_steps = 0
 
     for i in range(num_games):
         table = Table()
-        buffer = ReplayBuffer(capacity=1)  # 不紀錄資料，只跑模型
+        buffer = ReplayBuffer(capacity=5000)  # 不紀錄資料，只跑模型
         table.run_game_loop(buffer)
 
         ai_player = next(p for p in table.players if p.is_ai)
-        total_reward += ai_player.points
+        total_point += ai_player.points
+        reward_list = [entry["reward"] for entry in buffer.buffer]
+        total_reward += sum(reward_list)
+        total_steps += len(reward_list)
 
         ranks = sorted(table.players, key=lambda p: p.points, reverse=True)
         rank_index = ranks.index(ai_player)
@@ -28,12 +33,14 @@ def evaluate_model(num_games=NUM_TEST_GAMES):
         if rank_index == 0:
             total_win += 1
 
-    avg_reward = total_reward / num_games
+    avg_reward = total_reward / total_steps if total_steps > 0 else 0.0
+    avg_point = total_point / num_games
     win_rate = total_win / num_games
     avg_rank = total_rank_sum / num_games
 
     result = {
         "avg_reward": round(avg_reward, 2),
+        "avg_point": round(avg_point, 2),
         "win_rate": round(win_rate, 3),
         "avg_rank": round(avg_rank, 2)
     }
