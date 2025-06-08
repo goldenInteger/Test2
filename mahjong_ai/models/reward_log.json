@@ -578,5 +578,12 @@
     "avg_point": 8880.0,
     "win_rate": 0.0,
     "avg_rank": 3.2
+  },
+  {
+    "epoch": 50,
+    "avg_reward": 0.82,
+    "avg_point": 24160.0,
+    "win_rate": 0.0,
+    "avg_rank": 2.8
   }
 ]

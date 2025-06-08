@@ -11,7 +11,7 @@ os.makedirs("mahjong_ai/data", exist_ok=True)
 os.makedirs("mahjong_ai/models", exist_ok=True)
 
 # === 訓練輪數設定 ===
-NUM_ROUNDS = 10
+NUM_ROUNDS = 1
    # ← 想跑幾輪你可以改這裡
 
 for i in range(1, NUM_ROUNDS + 1):
