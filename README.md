@@ -87,7 +87,7 @@ mahjong_ai/
 
   確認將 mahjong_ai/util/helper_interface/ 內的函式 mingpai_mahjong_helper, call_mahjong_helper, test_call_mahjong_helper 中的 exe_path 改為 mahjong-helper.exe 的位置
 
-  預設為 r"C:\自料夾名稱\Test2-main\mahjong-helper.exe"
+  預設為 r"C:\資料夾名稱\Test2-main\mahjong-helper.exe"
   
   2. 一鍵模擬對局 + 訓練模型 + 測試成效
 
