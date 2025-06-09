@@ -84,6 +84,10 @@ mahjong_ai/
   請先確認你已安裝 Python 3.9 或以上版本，並於專案根目錄執行下列指令安裝套件：
   
   pip install -r requirements.txt
+
+  確認將 mahjong_ai/util/helper_interface/ 內的函式 mingpai_mahjong_helper, call_mahjong_helper, test_call_mahjong_helper 中的 exe_path 改為 mahjong-helper.exe 的位置
+
+  預設為 r"C:\自料夾名稱\Test2-main\mahjong-helper.exe"
   
   2. 一鍵模擬對局 + 訓練模型 + 測試成效
 
