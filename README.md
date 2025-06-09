@@ -13,7 +13,7 @@
 
 專案結構說明：
 mahjong_ai/
-├── table/                 # 牌桌模組（tile, player, round, meld, hand...）
+├── table/                 # 牌桌模組（tile, player, round, meld, hand...）/n
 ├── data/                  # 模擬數據存放
 ├── models/                # 模型及數據存放
 ├── model/                 # 深度學習模型定義（Brain, DQN, AuxNet）
